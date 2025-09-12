@@ -1,0 +1,244 @@
+📑 Task 1 – What to Do Guide (Detailed, with Explanations)
+🔹 Part A – Analysis
+1. Introduction
+
+What to do:
+
+Write 1 short paragraph on purpose (analyse problem, propose solution).
+
+Briefly describe client scenario (GibJohn tutoring model).
+
+State objectives (engagement, accessibility, progress tracking).
+
+End with a link to business goals (growth, wider learning).
+
+Nuance:
+
+“Objectives” = what your analysis is trying to achieve, not just the client’s goals.
+
+Distinction → Show awareness that objectives align with GibJohn’s business needs.
+
+2. Analysis of Existing Solutions
+
+What to do:
+
+Pick 2–3 known platforms (Khan Academy, Duolingo, etc.).
+
+List strengths (good progress tracking, gamification).
+
+List weaknesses (limited accessibility, poor personalisation).
+
+Spot opportunities (combine strengths, fix weaknesses).
+
+End with a justification: why GibJohn needs a new solution.
+
+Nuance:
+
+This is essentially a mini SWOT analysis (Strengths, Weaknesses, Opportunities).
+
+Distinction → explicitly link findings to GibJohn’s needs (not just generic comments).
+
+3. Emerging Technologies
+
+What to do:
+
+Mention 3–4 relevant emerging tech (AI, IoT, AR/VR, Cloud).
+
+For each, write: What it is + How it applies to education + How GibJohn could use it.
+
+Nuance:
+
+“Emerging” doesn’t mean sci-fi — it means new but realistic in education.
+
+Distinction → Show practical integration (e.g. “AI → adaptive quizzes linked to student progress tracking”).
+
+4. Business Context
+
+What to do:
+
+Overview: Who is GibJohn?
+
+Goals: What they want to achieve (engagement, monitoring, wider learning).
+
+Audience: Who will use it (students, tutors, guardians).
+
+Constraints: Budget, deadlines, regulations.
+
+Nuance:
+
+“Context” = the environment in which the solution must work.
+
+Distinction → Show how business goals/constraints will influence design (e.g. “Budget limits mean phased delivery”).
+
+5. Requirements Analysis
+
+What to do:
+
+Functional requirements = system features (login, resource upload, dashboards).
+
+Non-functional requirements = system qualities (security, usability, reliability).
+
+KPIs = measurable success targets (99.9% uptime, <2s page load, weekly active learners %).
+
+MoSCoW prioritisation = rank features as Must, Should, Could, Won’t.
+
+Nuance:
+
+“KPIs” = numbers you can measure, not vague goals.
+
+“User acceptance criteria” = the conditions that prove the system works for end users (e.g. “Users can register and log in successfully within 30s”).
+
+6. Problem Decomposition
+
+What to do:
+
+Break system into modules (Authentication, Content, Progress, Rewards, Admin).
+
+For each, explain its input, process, and output.
+
+Draw a simple system diagram showing how they link.
+
+Nuance:
+
+“Decomposition” = breaking down complexity into smaller problems.
+
+Distinction → Must cover inputs, processes, outputs (not just list modules).
+
+7. Proposed Solution Overview
+
+What to do:
+
+Name your tech stack (frontend, backend, database).
+
+State hosting choice (Cloud vs on-prem).
+
+List security measures (encryption, HTTPS, password hashing).
+
+Explain where emerging tech fits (AI → personalisation, Cloud → scalability).
+
+Nuance:
+
+Distinction → Justify each choice, not just list (e.g. “React chosen for responsive UI across devices”).
+
+8. Legal & Regulatory Compliance
+
+What to do:
+
+Mention laws: GDPR, Equality Act, Consumer Rights, Copyright/IP.
+
+Use a compliance mapping table → Law → Requirement → How addressed.
+
+Nuance:
+
+“Regulatory guidelines” = not just laws, but also standards like W3C (web accessibility).
+
+Distinction → Address under-18 users (privacy, parental consent).
+
+9. Professional & Ethical Standards
+
+What to do:
+
+Refer to the BCS Code of Conduct.
+
+Mention principles: Public interest, Privacy, Integrity, Competence.
+
+Show how solution respects these (e.g. “Design ensures privacy of learner data”).
+
+Nuance:
+
+Distinction → Don’t just name BCS; show how you apply its principles to your solution.
+
+10. Justification of Design Choices
+
+What to do:
+
+Explain why chosen frontend, backend, database, hosting, and UX decisions are best.
+
+Justify colour, typography, navigation choices.
+
+Nuance:
+
+Distinction → Tie every decision back to client needs and industry practice.
+
+11. Risk Assessment
+
+What to do:
+
+Create a table with: Risk | Impact | Likelihood | Mitigation.
+
+Include both technical (data breaches, downtime) and business risks (low adoption, missed deadlines).
+
+Nuance:
+
+“Mitigation” ≠ avoid risk — it means what you do to reduce or manage it.
+
+🔹 Part B – Design
+12. Interface Design
+
+What to do:
+
+Provide wireframes of key pages (Login, Dashboard, Tutor Portal).
+
+Include a navigation flow diagram.
+
+Justify UI/UX using WCAG 2.1 accessibility standards.
+
+Nuance:
+
+“White space” = spacing that improves readability.
+
+“Visual hierarchy” = using size, colour, or layout to show importance.
+
+13. Data Design
+
+What to do:
+
+Draw an ERD (entities: User, Tutor, Resource, Progress, Reward).
+
+Provide a data dictionary (attributes, types, examples).
+
+Mention validation rules (e.g. “password ≥ 8 chars”).
+
+Nuance:
+
+Distinction → Use consistent naming conventions + error handling (input masks, type casting).
+
+14. Algorithm Design
+
+What to do:
+
+Show 5 key processes: Registration, Login, CRUD, Rewards, Feedback.
+
+Present as pseudocode or flowcharts.
+
+Nuance:
+
+Distinction → Must show precise logic, efficient structure, accepted conventions (IF, WHILE, indentation).
+
+15. Test Strategy
+
+What to do:
+
+Explain levels of testing: Unit, Integration, UAT.
+
+Show order (unit → integration → UAT).
+
+Provide a test cases table (Input → Expected → Actual).
+
+Cover test data types: normal, erroneous, extreme.
+
+Nuance:
+
+“Interrelation of components” = explain how one test affects others (e.g. login must work before dashboard testing).
+
+🌟 Distinction Polish
+
+Include diagrams everywhere (wireframes, ERD, flowcharts, system architecture).
+
+Provide a compliance table in Legal section.
+
+Explicitly apply BCS ethics.
+
+Show futureproofing (e.g. “AI now, AR/VR in phase 2”).
+
+Write in a professional style for technical + non-technical audiences.
