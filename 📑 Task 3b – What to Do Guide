@@ -1,0 +1,103 @@
+📑 Task 3b – What to Do Guide
+🎯 Goal
+
+Write an evaluation report showing how well your prototype meets requirements and what improvements are needed, using the feedback gathered in Task 3a.
+
+Step 1 – Evaluate Assets & Content
+
+What to do:
+
+Review the assets you used (images, videos, sample data, code snippets).
+
+Ask: Were they appropriate for the prototype?
+
+Check validity & reliability of sources (was the info accurate, up-to-date?).
+
+Note any legal/ethical issues:
+
+Copyright (did you use unlicensed material?).
+
+GDPR/privacy (personal data).
+
+Representation (inclusive images, no stereotypes).
+
+Nuance:
+
+“Validity” = was the source accurate and suitable?
+
+“Reliability” = can it be trusted (e.g. official site vs random blog)?
+
+Distinction → Show awareness of bias, copyright, inclusivity.
+
+Step 2 – Evaluate Prototype Against Requirements
+
+What to do:
+
+Compare your solution to:
+
+Functional requirements (login, quizzes, tracking, etc.).
+
+Non-functional requirements (performance, usability, accessibility).
+
+KPIs (e.g. <2s load time, uptime %, engagement).
+
+User acceptance criteria (UAC) (e.g. “users can register without errors”).
+
+Say which requirements were fully met, partially met, or not met.
+
+Nuance:
+
+Examiners want specific evidence (not just “it worked well”).
+
+Distinction → Use feedback from 3a to support claims.
+
+Example: “80% of users said navigation was easy (UAC met).”
+
+Step 3 – Improvements & Future Development
+
+What to do:
+
+Suggest improvements supported by feedback.
+
+Example: “Add dark mode” if users reported readability issues.
+
+Suggest future features (AI, gamification expansion, VR).
+
+Justify why improvements matter (link back to requirements or KPIs).
+
+Nuance:
+
+“Future development” ≠ random wish list. It must link to:
+
+User feedback.
+
+Business goals.
+
+Unmet requirements.
+
+Step 4 – Structure Your Evaluation
+
+What to do:
+Write your report in 3 clear sections:
+
+Assets & Content – Appropriateness, validity, legality, ethics.
+
+Evaluation vs Requirements – FR, NFR, KPIs, UAC.
+
+Improvements – Feedback-driven, realistic, linked to client needs.
+
+Nuance:
+
+Distinction → Show balance (what worked well + what needs work).
+
+Always connect feedback → requirement → improvement.
+
+✅ Distinction-Level Tips
+
+Use specific feedback quotes/data from Task 3a.
+
+Reference requirements and KPIs directly.
+
+Show legal/ethical awareness (copyright, GDPR, accessibility).
+
+Propose realistic, evidence-based improvements.
