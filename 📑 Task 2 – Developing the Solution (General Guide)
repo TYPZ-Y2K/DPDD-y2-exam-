@@ -1,0 +1,138 @@
+📑 Task 2 – Developing the Solution (General Guide)
+🎯 Goal
+
+Create a functional prototype for Client that:
+
+uses front-end + back-end code (at least 2 languages),
+
+includes a database,
+
+follows good coding practices,
+
+and is tested + documented.
+
+Total Marks = 48
+
+Step 1 – Front-End Development
+
+What to do:
+
+Build user-facing pages (e.g. login, register, dashboard, resource page).
+
+Use HTML5 + CSS3 for structure and style.
+
+Add JavaScript for validation or dynamic updates.
+
+Nuance:
+
+Examiners look for: usability, responsiveness, accessibility.
+
+Show good UI/UX design (consistent nav, clear forms, error messages).
+
+Code snippets to prep:
+
+Login form (HTML + CSS).
+
+Registration form (HTML + validation JS).
+
+Navigation bar.
+
+Dashboard layout with progress bar.
+
+Step 2 – Back-End Development
+
+What to do:
+
+Use Python (Flask/Django) or Node/PHP depending on what you know.
+
+Handle routes (login, register, dashboard).
+
+Connect to a database (MySQL, SQLite, etc.).
+
+Nuance:
+
+Examiners want secure code → no plain text passwords, use hashing.
+
+Must pass data correctly between front-end and back-end.
+
+Code snippets to prep:
+
+Flask route for login + registration.
+
+Database connection (SQLite/MySQL).
+
+CRUD operations (Create, Read, Update, Delete).
+
+Step 3 – Database
+
+What to do:
+
+Create at least 2–3 linked tables (User, Resource, Progress, Reward).
+
+Use foreign keys to show relationships.
+
+Insert some sample data for testing.
+
+Nuance:
+
+“Complex data model” = not just 1 table.
+
+Naming conventions matter (e.g. user_id, not u1).
+
+Code snippets to prep:
+
+SQL create table statements.
+
+Sample insert queries.
+
+A join query (e.g. get learner progress for dashboard).
+
+Step 4 – Testing
+
+What to do:
+
+Test throughout development (iterative testing).
+
+Use normal, erroneous, extreme test data.
+
+Keep a test log (inputs, expected, actual, result).
+
+Nuance:
+
+“Iterative” = test → fix → retest → log.
+
+Include boundary values (e.g. password min length).
+
+Code snippets to prep:
+
+Python unit test for login function.
+
+JavaScript form validation (normal/erroneous/extreme).
+
+Step 5 – Documentation
+
+What to do:
+
+Maintain:
+
+Asset log (where you got resources).
+
+Test log (with iterative fixes).
+
+Version log (commit messages or changelog).
+
+Nuance:
+
+Examiners want professional standards: comments in code, clear structure, proper filenames.
+
+✅ Distinction-Level Tips
+
+Use two languages properly (e.g. Python + SQL, HTML + JS).
+
+Write efficient code (functions, no repetition, clear logic).
+
+Apply security practices (input validation, sanitisation, hashing, HTTPS where possible).
+
+Provide error handling (friendly error messages, validation).
+
+Keep solution robust + maintainable (comments, indentation, no spaghetti code).
