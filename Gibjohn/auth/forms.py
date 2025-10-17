@@ -53,8 +53,8 @@ def guardian_not_supported(form, field):
 
 # --- Forms ---
 class RegisterForm(FlaskForm):
-    name = StringField(
-        "name",
+    full_name = StringField(
+        "Full Name",
         validators=[
             DataRequired(),
             Length(min=2, max=49),
@@ -72,11 +72,9 @@ class RegisterForm(FlaskForm):
     )
     DOB = StringField("Date of Birth", validators=[DataRequired()])
 
-    role = SelectField(
-    "role",
     role = SelectField("role",
     choices=[("student","Student"),("tutor","Tutor"),("guardian","Guardian")],
-    validators=[DataRequired(), guardian_not_supported])
+    validators=[DataRequired(), guardian_not_supported]
     )
     submit = SubmitField("Create account")
 

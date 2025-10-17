@@ -52,18 +52,18 @@ def create_app():
     app.register_blueprint(learner_bp)
     app.register_blueprint(tutor_bp)
 
-    # home
-    @app.route("/home")
+    # home route
     @app.route("/")
     def home():
-        return render_template("index.html")
-    
+            return render_template("home.html")
+
     @app.route("/consent")
     def consent():
         resp = make_response(redirect(url_for("home")))
         resp.set_cookie("consent", "yes",
         max_age=60*60*24*365,
         httponly=True, samesite="Lax")
+        return resp
 
 
     @app.route("/revoke-consent")

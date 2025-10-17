@@ -17,7 +17,7 @@ def index():
     return render_template("index.html")
 
 # --- Rate limiting ---
-limiter = Limiter(get_remote_address, bp=bp, default_limits=["200 per day"])
+limiter = Limiter(get_remote_address, default_limits=["200 per day"])
 
 
 
@@ -31,7 +31,7 @@ def register():
     if form.validate_on_submit():
 
         # 1) Normalise inputs
-        student_name = " ".join(form.student_name.data.strip().split())
+        full_name = " ".join(form.full_name.data.strip().split())
         raw_email = form.email.data.strip()
 
         # 2) Validate + normalise email (STRICT)
@@ -39,7 +39,7 @@ def register():
             email = validate_email(raw_email, allow_smtputf8=True).normalized
         except EmailNotValidError:
             flash("Please enter a valid email address.", "error")
-            return redirect(url_for("register"))
+            return redirect(url_for("auth.register"))
 
         pw = form.password.data
 
@@ -49,7 +49,7 @@ def register():
             return redirect(url_for("login"))
 
         # 4) Create + commit (DB-level guarantee)
-        user = User(email=email, student_name=student_name)
+        user = User(email=email, full_name=full_name)
         user.set_password(pw)
         db.session.add(user)
 
@@ -67,13 +67,13 @@ def register():
                 return redirect(url_for("login"))
             else:
                 flash(f"DB error: {msg}", "error")
-                return redirect(url_for("register"))
+                return redirect(url_for("auth.register"))
 
         except Exception as err: # catch-all
             db.session.rollback()
             print("Unexpected DB error:", err)
             flash("Unexpected error creating account.", "error")
-            return redirect(url_for("register"))
+            return redirect(url_for("auth.register"))
 
     # If we get here, either GET or validation failed → show errors
     if form.errors:
@@ -129,7 +129,7 @@ def profile():
 
     if request.method == "POST" and "submit" in request.form and form.validate_on_submit():
         # 1) Normalise inputs
-        student_name = " ".join(form.student_name.data.strip().split())
+        full_name = " ".join(form.full_name.data.strip().split())
         raw_email = form.email.data.strip()
 
         # 2) Validate + normalise email (STRICT)
@@ -146,7 +146,7 @@ def profile():
             return redirect(url_for("profile"))
 
         # 4) Update + commit
-        current_user.student_name = student_name
+        current_user.full_name = full_name
         current_user.email = email
         try:
             db.session.commit()
@@ -173,7 +173,7 @@ def profile():
         print("PROFILE ERRORS:", form.errors)  # dev-only
     return render_template("profile.html", form=form, delete_form=delete_form)
 
-@bp.route("account/password", methods=["GET","POST"])
+@bp.route("/account/password", methods=["GET","POST"])
 @login_required
 def change_password():
     form = ChangePasswordForm()
