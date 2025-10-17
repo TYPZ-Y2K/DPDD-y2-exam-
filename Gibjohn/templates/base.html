@@ -13,19 +13,19 @@
   <a href="{{ url_for('index') }}" class="{{ 'active' if request.path == url_for('index') else '' }}">Home</a>
 
   {% if current_user.is_authenticated %}
-    <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.path == url_for('dashboard') else '' }}">Dashboard</a>
+    <a href="{{ url_for('learner.dashboard') }}" class="{{ 'active' if request.path == url_for('learner.dashboard') else '' }}">Dashboard</a>
     <a href="{{ url_for('profile') }}" class="{{ 'active' if request.path == url_for('profile') else '' }}">Profile</a>
-    <a href="{{ url_for('change_password') }}" class="{{ 'active' if request.path == url_for('change_password') else '' }}">Change password</a>
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <a href="{{ url_for('auth.change_password') }}" class="{{ 'active' if request.path == url_for('auth.change_password') else '' }}">Change password</a>
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
   {% else %}
-    <a href="{{ url_for('register') }}" class="{{ 'active' if request.path == url_for('register') else '' }}">Register</a>
-    <a href="{{ url_for('login') }}" class="{{ 'active' if request.path == url_for('login') else '' }}">Login</a>
+    <a href="{{ url_for('auth.register') }}" class="{{ 'active' if request.path == url_for('auth.register') else '' }}">Register</a>
+    <a href="{{ url_for('auth.login') }}" class="{{ 'active' if request.path == url_for('auth.login') else '' }}">Login</a>
   {% endif %}
 
-  <a href="{{ url_for('privacy') }}" class="{{ 'active' if request.path == url_for('privacy') else '' }}">Privacy</a>
+  <a href="{{ url_for('privacy') }}" class="{{ 'active' if request.path == url_for('auth.privacy') else '' }}">Privacy</a>
 </nav>
 
-
+<div class="flash-container">
 
   {% with msgs = get_flashed_messages(with_categories=True) %} <!-- flash area -->
     {% if msgs %}

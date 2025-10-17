@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy{% endblock %}
+{% block content %}
+<h2>Privacy Notice</h2>
+<p>We store minimal personal data (student name, email). Passwords are stored as werkzeug.security hashes (never plain text).</p>
+<ul>
+  <li>Purpose: account login and access control.</li>
+  <li>Security: session cookies (HttpOnly, SameSite), optional persistent login.</li>
+  <li>Rights: contact admin to correct or remove your data.</li>
+</ul>
+{% endblock %}
