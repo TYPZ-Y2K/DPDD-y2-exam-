@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}GibJohn Tutoring — Home{% endblock %}
+
+{% block content %}
+<header class="site-hero" role="banner" aria-labelledby="hero-title">
+  <div class="container">
+    <h1 id="hero-title">GibJohn Tutoring</h1>
+    <p class="tagline">Track progress. Take quizzes. Earn achievements.</p>
+
+    {% if current_user.is_authenticated %}
+      <a class="btn btn-primary" href="{{ url_for('learner.dashboard') }}">Go to your dashboard</a>
+    {% else %}
+      <div class="cta-row" role="group" aria-label="Get started">
+        <a class="btn btn-primary" href="{{ url_for('auth.register') }}">Create an account</a>
+        <a class="btn btn-secondary" href="{{ url_for('auth.login') }}">Log in</a>
+      </div>
+    {% endif %}
+  </div>
+</header>
+
+<section class="features container" aria-labelledby="features-title">
+  <h2 id="features-title">Why students & tutors use GibJohn</h2>
+
+  <ul class="feature-grid">
+    <li class="card">
+      <h3>Progress tracking</h3>
+      <p>Clear subject bars with text percentages, not colour-only. Accessible for everyone.</p>
+    </li>
+    <li class="card">
+      <h3>Quick quizzes</h3>
+      <p>Short quizzes update progress instantly and log activity for tutors.</p>
+    </li>
+    <li class="card">
+      <h3>Assignments</h3>
+      <p>Tutors create class assignments and see submissions at a glance.</p>
+    </li>
+    <li class="card">
+      <h3>Achievements</h3>
+      <p>Optional XP & badges to keep you motivated (coming after MVP).</p>
+    </li>
+  </ul>
+</section>
+
+<section class="how-it-works container" aria-labelledby="how-title">
+  <h2 id="how-title">How it works</h2>
+  <ol class="steps">
+    <li><strong>Register</strong> as a learner or tutor.</li>
+    <li><strong>Log in</strong> to your dashboard.</li>
+    <li><strong>Take a quiz</strong> — your progress updates automatically.</li>
+    <li><strong>Tutors</strong> set assignments and review activity.</li>
+  </ol>
+</section>
+
+<section class="role-panels container" aria-labelledby="roles-title">
+  <h2 id="roles-title">Choose your role</h2>
+  <div class="role-grid">
+    <article class="panel" aria-labelledby="learner-title">
+      <h3 id="learner-title">Learners</h3>
+      <p>See your Maths/English/Science progress and achievements.</p>
+      <a class="btn btn-link" href="{{ url_for('learner.dashboard') }}">View learner dashboard</a>
+    </article>
+
+    <article class="panel" aria-labelledby="tutor-title">
+      <h3 id="tutor-title">Tutors</h3>
+      <p>Create assignments, monitor progress and recent activity.</p>
+      <a class="btn btn-link" href="{{ url_for('tutor.tutor_dashboard') }}">View tutor dashboard</a>
+    </article>
+  </div>
+</section>
+
+<!-- polite live region for any global messages -->
+<div class="sr-only" aria-live="polite" id="status-area">{{ get_flashed_messages()|join(' ') }}</div>
+{% endblock %}

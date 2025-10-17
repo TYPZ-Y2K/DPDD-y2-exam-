@@ -1,0 +1,149 @@
+body{
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    margin:0;background:#f7fbff;
+    color:#0a2540
+} /* base font + colors */
+
+.container{
+    width:min(900px,92%);
+    margin:1rem auto
+} /* centered content width */
+
+.nav{
+    display:flex;
+    gap:1rem;
+    background:#0a7bdc;
+    color:#fff;
+    padding:.75rem
+} /* simple nav bar */
+
+.nav a{color:#fff;
+    text-decoration:none
+} /* white nav links */
+
+.nav a:hover{
+    text-decoration:underline
+} /* underline on hover */
+
+.flash{
+    list-style:none;
+    padding-left:0;
+    margin:1rem 0
+} /* flash list styling */
+
+.flash li{
+    padding:.5rem .75rem;
+    border-radius:8px;
+    margin:.4rem 0;
+    background:#fff
+} /* flash item card */
+
+.flash .error{background:#fdd;
+    border:1px solid #d00
+} /* error flash */
+
+.flash .success{background:#dfd;
+    border:1px solid #0a0
+} /* success flash */
+
+form{
+    background:#fff;
+    padding:1rem;
+    border-radius:8px;
+    box-shadow:0 0 5px rgb(0 0 0 / .1);
+    margin:1rem 0
+} /* form card */
+
+form div{margin:.5rem 0
+} /* form field spacing */
+
+form label{display:block;
+    font-weight:600;
+    margin-bottom:.2rem
+} /* form labels */
+
+form input[type=text],
+form input[type=email],
+form input[type=password]{
+    width:100%;
+    padding:.4rem;
+    font-size:1rem;
+    border:1px solid #ccc;
+    border-radius:4px;
+    box-sizing:border-box
+} /* form inputs */ 
+
+form input[type=submit]{
+    background:#0a7bdc;
+    color:#fff;
+    border:none;
+    padding:.5rem 1rem;
+    font-size:1rem;
+    border-radius:4px;
+    cursor:pointer
+} /* submit button */
+
+form input[type=submit]:hover{
+    background:#095bb5
+} /* submit hover */
+
+h1,h2,h3{
+    color:#0a2540
+} /* headings */
+
+a{color:#0a7bdc;
+    text-decoration:none
+} /* links */
+
+a:hover{
+    text-decoration:underline
+} /* link hover */
+
+footer{
+    text-align:center;
+    font-size:.9rem;
+    color:#666;
+    margin:2rem 0
+} /* footer styling */
+
+/* Responsive */
+@media (max-width:600px){
+    .nav{
+        flex-direction:column;
+        gap:.5rem
+    } /* vertical nav on small screens */
+}
+
+.nav a.active {
+text-decoration: underline; font-weight: 600;
+} /* active nav link */
+
+.form-row { 
+    display:flex; flex-direction:column; gap:.25rem; margin-bottom:.75rem;
+} /* form field layout */
+
+.error { 
+    color:#b00020; margin:0; font-size:.9rem;
+} /* form error messages */
+
+
+.checkbox {
+display:flex; align-items:center; gap:.5rem;
+} /* checkbox layout */
+
+
+
+/* style.css */
+/* CSS for Flask app */
+/* static/css/style.css */
+/* Basic reset */
+/* Layout and colors */
+/* Navigation bar */
+/* Flash messages */
+/* Forms */
+/* Typography */
+/* Links */
+/* Footer */
+/* Responsive design */
+/* Mobile adjustments */
+

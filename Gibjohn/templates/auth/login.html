@@ -1,0 +1,46 @@
+<!-- templates/login.html -->
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<h2>Login</h2>
+
+<form method="POST" action="{{ url_for('login') }}" novalidate>
+  {{ form.hidden_tag() }}
+
+  <div class="form-row">
+    {{ form.email.label }}
+    {{ form.email(id="email", autocomplete="email", inputmode="email", autofocus=True) }}
+    {% for err in form.email.errors %}<p class="error">{{ err }}</p>{% endfor %}
+  </div>
+
+  <div class="form-row">
+    {{ form.password.label }}
+    {{ form.password(id="password", autocomplete="current-password") }}
+    {% for err in form.password.errors %}<p class="error">{{ err }}</p>{% endfor %}
+
+    <label class="checkbox" style="margin-top:.25rem;">
+      <input type="checkbox" id="togglePass"> Show password
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label class="checkbox">
+      {{ form.remember(id="remember") }}
+      {{ form.remember.label }}
+    </label>
+  </div>
+
+  {{ form.submit(class_="btn") }}
+
+  <div class="errors">
+    {% for field in form if field.name not in ["csrf_token","submit"] %}
+      {% for err in field.errors %}<p class="error">{{ err }}</p>{% endfor %}
+    {% endfor %}
+  </div>
+</form>
+
+<script src="{{ url_for('static', filename='js/login.js') }}" defer></script>
+
+{% endblock %}
+

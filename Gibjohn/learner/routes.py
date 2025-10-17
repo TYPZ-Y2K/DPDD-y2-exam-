@@ -1,0 +1,1 @@
+from . import bp  # <-- use the blueprint

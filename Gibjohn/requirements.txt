@@ -1,0 +1,10 @@
+Flask
+Flask-WTF
+Flask-Migrate
+Flask-Limiter
+Flask-Talisman
+Flask-Login
+Flask-SQLAlchemy
+SQLAlchemy
+WTForms
+email-validator
