@@ -4,18 +4,18 @@ from flask_login import LoginManager
 from flask_wtf import CSRFProtect
 from flask_wtf.csrf import CSRFError
 from flask_migrate import Migrate
-from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_talisman import Talisman
 from config import Config
 from models import db, User
+from auth.routes import limiter
 
 
 
 login_manager = LoginManager()
 csrf = CSRFProtect()
 migrate = Migrate()
-limiter = Limiter(key_func=get_remote_address, default_limits=["200 per day"])
+
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.config.from_object(Config)
@@ -34,7 +34,7 @@ csrf.init_app(app)
 migrate.init_app(app, db)
 limiter.init_app(app)
 
-
+    
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))

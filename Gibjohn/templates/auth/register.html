@@ -30,11 +30,13 @@
     {{ form.confirm.label }}
     {{ form.confirm(id="confirm", autocomplete="new-password") }}
     {% for err in form.confirm.errors %}<p class="error">{{ err }}</p>{% endfor %}
+  </div>
 
     <div class="form-row">
         {{ form.DOB.label }}
         {{ form.DOB(id="DOB", autocomplete="DOB") }}
         {% for err in form.DOB.errors %}<p class="error">{{ err }}</p>{% endfor %}
+    </div>
 
     <div class="form-row">
     {{ form.role.label }}

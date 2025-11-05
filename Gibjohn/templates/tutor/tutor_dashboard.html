@@ -119,13 +119,8 @@
     {% endfor %}
     </ul>
 
-    <a class="btn btn-primary block" href="#">Create new assignments</a>
+    <a class="btn btn-primary block" href="{{ url_for('tutor.new_assignments') }}">Create new assignments</a>
 </div>
 </aside>
 </section>
-
-<footer class="td-footer">
-<p>©2025 GibJohn Tutoring · Contact: info@GibJohn.co.uk</p>
-</footer>
-
 {% endblock %}

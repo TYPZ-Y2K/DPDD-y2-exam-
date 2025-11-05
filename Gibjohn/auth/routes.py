@@ -11,7 +11,7 @@ from . import bp  #  Blueprint created in auth/__init__.py;  its name is "auth"
 from .forms import RegisterForm, LoginForm, ProfileForm, ChangePasswordForm, DeleteAccountForm
 from models import db, User
 
-# If you use Flask-Limiter v3+, you usually init this in app factory and call limiter.limit on routes.
+# If you use Flask-Limiter v3+, you usually init this in app factory and call limiter.limit on routes.Limiter(get_remote_address, default_limits=["200 per day"])
 limiter = Limiter(get_remote_address, default_limits=["200 per day"])
 
 
@@ -27,7 +27,7 @@ def register():
         full_name = " ".join(form.full_name.data.strip().split())
         raw_email = form.email.data.strip()
         pw        = form.password.data
-        dob       = form.DOB.data      # if your form field is named DOB
+        dob       = form.dob.data      # if your form field is named dob
         role      = form.role.data
 
         # Normalize + validate email
@@ -44,8 +44,8 @@ def register():
 
         # Create user (match model fields exactly)
         user = User(
-            email=email,
-            full_name=full_name,
+            email=email,        # ✔ matches model
+            full_name=full_name, # ✔ matches model
             dob=dob,            # ✔ matches model
             role=role           # ✔ matches model
         )

@@ -9,7 +9,6 @@ from wtforms.validators import (
     DataRequired, Email, Length, EqualTo, Regexp, ValidationError
 )
 
-
 # --- Form definitions + validators ---
 # Allow letters, spaces, hyphens, apostrophes; 2–120 chars total
 NAME_PATTERN = r"^[A-Za-z][A-Za-z\s\-’']{1,119}$"
@@ -33,12 +32,9 @@ def normalize_name(name: str) -> str:
     return " ".join(part.capitalize() for part in (name or "").split())
 
 
-
 def guardian_not_supported(form, field):
     if field.data == "guardian":
         raise ValidationError("Guardian features coming soon.")
-
-
 
 
 # --- Forms ---
@@ -61,7 +57,7 @@ class RegisterForm(FlaskForm):
         validators=[DataRequired(), EqualTo("password", message="Passwords must match.")],
     )
     # HTML date inputs send YYYY-MM-DD; DateField parses to a date object.
-    DOB = DateField("Date of birth", format="%Y-%m-%d", validators=[DataRequired()])
+    dob = DateField("Date of birth", format="%Y-%m-%d", validators=[DataRequired()])
 
     role = SelectField("role",
     choices=[("learner","Learner"),("tutor","Tutor"),("guardian","Guardian")],
