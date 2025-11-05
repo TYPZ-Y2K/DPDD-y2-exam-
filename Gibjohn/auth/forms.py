@@ -1,49 +1,39 @@
 # auth/forms.py
-from dataclasses import field
-from flask_wtf import FlaskForm  # base form class
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField  # form fields
-from wtforms.validators import DataRequired, Email, Length, EqualTo, Regexp, ValidationError  # validators
-import re  # for regex validation
+from flask_wtf import FlaskForm
+from wtforms import (
+    StringField, PasswordField, BooleanField, SubmitField,
+    SelectField
+)
+from wtforms.fields import DateField
+from wtforms.validators import (
+    DataRequired, Email, Length, EqualTo, Regexp, ValidationError
+)
 
 
 # --- Form definitions + validators ---
-NAME_PATTERN = r"^[A-Za-z][A-Za-z\s\-']{1,48}$"
-EMAIL_PATTERN = r"^[^@\s]+@[^@\s]+\.[^@\s]+$"
-NAME_REGEX = re.compile(NAME_PATTERN)
-EMAIL_REGEX = re.compile(EMAIL_PATTERN)
-
-def valid_email(form, field):
-    value = (field.data or "").strip()
-    if not EMAIL_REGEX.match(value):
-        raise ValidationError("Enter a valid email address.")
-
+# Allow letters, spaces, hyphens, apostrophes; 2–120 chars total
+NAME_PATTERN = r"^[A-Za-z][A-Za-z\s\-’']{1,119}$"
 
 def valid_name(form, field):
-    value = (field.data or "").strip()
-    if not value or not NAME_REGEX.match(value):
-        raise ValidationError("Use letters, spaces, hyphens or apostrophes.")
-
+    text = (field.data or "").strip()
+    if not text:
+        raise ValidationError("Name is required.")
+def strong_password(form, field):
+    pw = field.data or ""
+    if len(pw) < 10:
+        raise ValidationError("Password must be at least 10 characters long.")
+    if not any(c.isdigit() for c in pw):
+        raise ValidationError("Password must include at least one number.")
+    if not any(not c.isalnum() for c in pw):
+        raise ValidationError("Password must include at least one symbol.")
+    if not any(c.isupper() for c in pw):
+        raise ValidationError("Password must include at least one uppercase letter.")
 
 def normalize_name(name: str) -> str:
     return " ".join(part.capitalize() for part in (name or "").split())
 
 
-def strong_password(form, field):
-    pw = field.data or ""
 
-    if len(pw) < 10:
-        raise ValidationError("Password must be at least 10 characters long.")
-
-    if not any(c.isdigit() for c in pw):
-        raise ValidationError("Password must include at least one number.")
-
-    if not any(not c.isalnum() for c in pw):
-        raise ValidationError("Password must include at least one symbol.")
-
-    if not any(c.isupper() for c in pw):
-        raise ValidationError("Password must include at least one uppercase letter.")
-    
-    
 def guardian_not_supported(form, field):
     if field.data == "guardian":
         raise ValidationError("Guardian features coming soon.")
@@ -54,10 +44,10 @@ def guardian_not_supported(form, field):
 # --- Forms ---
 class RegisterForm(FlaskForm):
     full_name = StringField(
-        "Full Name",
+        "Full name",
         validators=[
             DataRequired(),
-            Length(min=2, max=49),
+            Length(min=2, max=120),
             Regexp(NAME_PATTERN, message="Use letters, spaces, hyphens or apostrophes."),
         ],
     )
@@ -70,10 +60,11 @@ class RegisterForm(FlaskForm):
         "Confirm password",
         validators=[DataRequired(), EqualTo("password", message="Passwords must match.")],
     )
-    DOB = StringField("Date of Birth", validators=[DataRequired()])
+    # HTML date inputs send YYYY-MM-DD; DateField parses to a date object.
+    DOB = DateField("Date of birth", format="%Y-%m-%d", validators=[DataRequired()])
 
     role = SelectField("role",
-    choices=[("student","Student"),("tutor","Tutor"),("guardian","Guardian")],
+    choices=[("learner","Learner"),("tutor","Tutor"),("guardian","Guardian")],
     validators=[DataRequired(), guardian_not_supported]
     )
     submit = SubmitField("Create account")
@@ -87,8 +78,8 @@ class LoginForm(FlaskForm):
 
 
 class ProfileForm(FlaskForm):
-    name = StringField(
-        "name",
+    full_name = StringField(
+        "Full name",
         validators=[
             valid_name,
             Length(min=2, max=49),
@@ -97,7 +88,7 @@ class ProfileForm(FlaskForm):
     )
     email = StringField(
         "Email",
-        validators=[DataRequired(), Email(), valid_email],
+        validators=[DataRequired(), Email()],
     )
     submit = SubmitField("Save changes")
 

@@ -7,8 +7,10 @@
     <h1 id="hero-title">GibJohn Tutoring</h1>
     <p class="tagline">Track progress. Take quizzes. Earn achievements.</p>
 
-    {% if current_user.is_authenticated %}
+    {% if current_user.is_authenticated and current_user.role == 'learner' %}
       <a class="btn btn-primary" href="{{ url_for('learner.dashboard') }}">Go to your dashboard</a>
+    {% elif current_user.is_authenticated and current_user.role == 'tutor' %}
+      <a class="btn btn-primary" href="{{ url_for('tutor.tutor_dashboard') }}">Go to your dashboard</a>
     {% else %}
       <div class="cta-row" role="group" aria-label="Get started">
         <a class="btn btn-primary" href="{{ url_for('auth.register') }}">Create an account</a>
@@ -70,4 +72,5 @@
 
 <!-- polite live region for any global messages -->
 <div class="sr-only" aria-live="polite" id="status-area">{{ get_flashed_messages()|join(' ') }}</div>
+
 {% endblock %}

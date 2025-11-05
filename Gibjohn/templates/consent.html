@@ -1,0 +1,12 @@
+<!-- consent.html -->
+{% extends "base.html" %}
+{% block title %}Consent — GibJohn Tutoring{% endblock %}
+
+{% block content %}
+<h1>Consent</h1>
+<p>We use cookies to enhance your experience. By continuing to visit this site, you agree to our use of cookies.</p>
+<form action="{{ url_for('consent') }}" method="post">
+    <button type="submit">I Consent</button>
+    <button type="submit" formaction="{{ url_for('decline_consent') }}">I Do Not Consent</button>
+</form>
+{% endblock %}

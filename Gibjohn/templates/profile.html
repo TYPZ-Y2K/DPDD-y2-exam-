@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<h2>Profile</h2>
+
+<form method="POST" action="{{ url_for('profile') }}" class="form" novalidate>
+{{ form.hidden_tag() }}
+
+<label>{{ form.full_name.label }} {{ form.full_name() }}</label>
+{% for err in form.full_name.errors %}<p class="error">{{ err }}</p>{% endfor %}
+
+<label>{{ form.email.label }} {{ form.email() }}</label>
+{% for err in form.email.errors %}<p class="error">{{ err }}</p>{% endfor %}
+
+{{ form.submit(class_="button") }}
+</form>
+
+<hr>
+<section class="danger">
+<h3>Delete Account</h3>
+<p>This action is permanent. Your profile and data will be removed.</p>
+<form method="POST" action="{{ url_for('profile') }}" class="form" novalidate>
+    {{ delete_form.hidden_tag() }}
+    <label>{{ delete_form.password.label }} {{ delete_form.password() }}</label>
+    {% for err in delete_form.password.errors %}<p class="error">{{ err }}</p>{% endfor %}
+
+    <label class="checkbox">
+    {{ delete_form.confirm() }} {{ delete_form.confirm.label }}
+    </label>
+    {% for err in delete_form.confirm.errors %}<p class="error">{{ err }}</p>{% endfor %}
+
+    {{ delete_form.delete_submit(class_="button danger") }}
+</form>
+</section>
+
+{% endblock %}

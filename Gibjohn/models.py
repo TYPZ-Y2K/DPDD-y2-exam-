@@ -15,6 +15,8 @@ class User(db.Model, UserMixin):
     dob = db.Column(db.Date)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))  # account creation timestamp
     last_login = db.Column(db.DateTime)
+    def get_id(self):
+        return str(self.user_id)
 
     def set_password(self, pw):  # hash and store password
         self.password_hash = generate_password_hash(pw)

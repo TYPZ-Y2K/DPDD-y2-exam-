@@ -5,7 +5,7 @@
 
 <h2>Login</h2>
 
-<form method="POST" action="{{ url_for('login') }}" novalidate>
+<form method="POST" action="{{ url_for('auth.login') }}" novalidate>
   {{ form.hidden_tag() }}
 
   <div class="form-row">

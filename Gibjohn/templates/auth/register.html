@@ -4,13 +4,13 @@
 {% block content %}
 <h2>Create your account</h2>
 
-<form method="POST" action="{{ url_for('register') }}" novalidate>
+<form method="POST" action="{{ url_for('auth.register') }}" novalidate>
   {{ form.hidden_tag() }}
 
   <div class="form-row">
-    {{ form.student_name.label }}
-    {{ form.student_name(id="student_name", autocomplete="name") }}
-    {% for err in form.student_name.errors %}<p class="error">{{ err }}</p>{% endfor %}
+    {{ form.full_name.label }}
+    {{ form.full_name(id="full_name", autocomplete="name") }}
+    {% for err in form.full_name.errors %}<p class="error">{{ err }}</p>{% endfor %}
   </div>
 
   <div class="form-row">
@@ -36,10 +36,10 @@
         {{ form.DOB(id="DOB", autocomplete="DOB") }}
         {% for err in form.DOB.errors %}<p class="error">{{ err }}</p>{% endfor %}
 
-     <div class="form-row">
-    {{ form.Role.label }}
-    {{ form.Role(id="Role", autocomplete="Role") }}
-    {% for err in form.Role.errors %}<p class="error">{{ err }}</p>{% endfor %}
+    <div class="form-row">
+    {{ form.role.label }}
+    {{ form.role(id="role", autocomplete="role") }}
+    {% for err in form.role.errors %}<p class="error">{{ err }}</p>{% endfor %}
   </div>
 
   {{ form.submit(class_="btn") }}
@@ -51,5 +51,7 @@
     {% endfor %}
   </div>
 </form>
+
+
 
 {% endblock %}

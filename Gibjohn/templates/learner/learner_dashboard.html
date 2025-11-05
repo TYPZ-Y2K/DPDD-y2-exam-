@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — GibJohn Tutoring{% endblock %}
+
+{% block content %}
+<section class="dash-top">
+<h1>Hi {{ current_user.full_name or "there" }}…</h1>
+
+<div class="xp-card" role="group" aria-labelledby="xp-label level-label">
+<div class="level">
+    <span id="level-label" class="level-label">Level: <strong>{{ level|default(3) }}</strong></span>
+</div>
+
+<div class="xp">
+    <span id="xp-label" class="xp-label">XP:</span>
+    <div class="xp-bar" aria-label="Experience progress" role="progressbar"
+        aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ xp|default(70) }}">
+    <div class="xp-fill" style="--p: {{ xp|default(70) }}%"></div>
+    <span class="xp-text">{{ xp|default(70) }}%</span>
+    </div>
+</div>
+</div>
+</section>
+
+<section class="dash-grid">
+<!-- Progress -->
+<div class="card progress-card">
+<h2>Progress:</h2>
+
+<div class="meter">
+    <span class="label">Maths:</span>
+    <div class="bar" role="progressbar" aria-label="Maths progress"
+        aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ maths|default(65) }}">
+    <div class="fill" style="--p: {{ maths|default(65) }}%"></div>
+    <span class="pct">{{ maths|default(65) }}%</span>
+    </div>
+</div>
+
+<div class="meter">
+    <span class="label">English:</span>
+    <div class="bar" role="progressbar" aria-label="English progress"
+        aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ english|default(82) }}">
+    <div class="fill" style="--p: {{ english|default(82) }}%"></div>
+    <span class="pct">{{ english|default(82) }}%</span>
+    </div>
+</div>
+
+<div class="meter">
+    <span class="label">Science:</span>
+    <div class="bar" role="progressbar" aria-label="Science progress"
+        aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ science|default(35) }}">
+    <div class="fill" style="--p: {{ science|default(35) }}%"></div>
+    <span class="pct">{{ science|default(35) }}%</span>
+    </div>
+</div>
+</div>
+
+<!-- Tasks + Achievements -->
+<div class="dash-side">
+<div class="card tasks-card">
+    <h2>Class tasks</h2>
+    <ul class="tasks">
+    <li>
+        <label class="checkbox">
+        <input type="checkbox" />
+        <span>Complete 3 quizzes</span>
+        </label>
+    </li>
+    <li>
+        <label class="checkbox">
+        <input type="checkbox" />
+        <span>Study for 20 minutes</span>
+        </label>
+    </li>
+    </ul>
+</div>
+
+<div class="card achievements-card">
+    <h2>Achievements</h2>
+    <ul class="achievements" aria-label="Recent achievements">
+    <li>
+        <span class="ach-icon" aria-hidden="true">👤</span>
+        <span class="sr-only">Profile completed</span>
+    </li>
+    <li>
+        <span class="ach-icon" aria-hidden="true">⭐</span>
+        <span class="sr-only">First star earned</span>
+    </li>
+    <li>
+        <span class="ach-icon" aria-hidden="true">🏅</span>
+        <span class="sr-only">Medal achieved</span>
+    </li>
+    </ul>
+</div>
+</div>
+</section>
+
+<section class="dash-ctas">
+<a class="btn btn-primary" href="{{ url_for('coming_soon') }}">Continue Learning</a>
+<a class="btn btn-secondary" href="#">Take a Quiz</a>
+</section>
+
+{% endblock %}
