@@ -1,0 +1,55 @@
+<!-- resources.html -->
+{% extends "base.html" %}
+{% block title %}Manage Resources{% endblock %}
+
+{% block content %}
+<form method="POST"
+    action="{{ url_for('tutor.resources') }}"
+    class="card"
+    enctype="multipart/form-data"
+    id="res-form">
+{{ form.hidden_tag() }}
+
+<div class="form-row">
+<label>Title
+    {{ form.title(id="title") }}
+</label>
+</div>
+
+<div class="form-row">
+<label>Description
+    {{ form.description(id="description") }}
+</label>
+</div>
+
+<!-- Optional link instead of files -->
+<div class="form-row">
+<label>Link (YouTube/Vimeo/Article)
+    <input id="link" type="url" name="link" placeholder="https://…">
+</label>
+<p class="muted" style="margin:.25rem 0 0;">
+    You can paste a link and/or upload files. Each will be saved as a separate resource.
+</p>
+</div>
+
+<!-- Drag & drop area -->
+<div id="dropzone" class="dropzone" tabindex="0" role="button"
+    aria-label="Drop files here or use the file picker">
+<!-- Hidden file input that the button triggers -->
+<input id="file-input" type="file" name="files" multiple hidden>
+
+<p>
+    <strong>Drag &amp; drop</strong> files here, or
+    <button type="button" class="btn btn-secondary" id="pick-btn">choose files</button>
+</p>
+
+<ul id="file-list" class="file-list"></ul>
+</div>
+
+<button class="btn btn-primary">Add Resource</button>
+</form>
+
+<!-- Load the external JS (make sure this path exists) -->
+<script src="{{ url_for('static', filename='/static/css/js/resources.js') }}"></script>
+{% endblock %}
+

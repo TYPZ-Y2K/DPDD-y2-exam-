@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block title %}Tutor Dashboard — GibJohn Tutoring{% endblock %}
-
 {% block content %}
 <section class="td-top">
 <h1>Hi {{ current_user.full_name or "Tutor" }}.</h1>
@@ -77,7 +76,7 @@
         <td>{{ a.title }}</td>
         <td>{{ a.due }}</td>
         <td>{{ a.submissions }}</td>
-        <td class="t-right"><a href="{{ coming_soon }}" aria-label="Open {{ coming_soon }}">›</a></td>
+        <td class="t-right"><a href="{{ a.link }}" aria-label="Open {{ a.title }}">›</a></td>
         </tr>
         {% endfor %}
         </tbody>
@@ -119,7 +118,7 @@
     {% endfor %}
     </ul>
 
-    <a class="btn btn-primary block" href="{{ url_for('tutor.new_assignments') }}">Create new assignments</a>
+    <a class="btn btn-primary block" href="{{ url_for('tutor.assignments') }}">Create new assignments</a>
 </div>
 </aside>
 </section>

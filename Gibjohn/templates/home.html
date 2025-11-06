@@ -53,6 +53,7 @@
   </ol>
 </section>
 
+{% if current_user.is_not_authenticated %}
 <section class="role-panels container" aria-labelledby="roles-title">
   <h2 id="roles-title">Choose your role</h2>
   <div class="role-grid">
@@ -69,6 +70,7 @@
     </article>
   </div>
 </section>
+{% endif %}
 
 <!-- polite live region for any global messages -->
 <div class="sr-only" aria-live="polite" id="status-area">{{ get_flashed_messages()|join(' ') }}</div>

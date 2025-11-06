@@ -49,6 +49,8 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(learner_bp)
 app.register_blueprint(tutor_bp)
 
+app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024  # 50 MB per request
+
 #--- Routes ---
 # debug: dump all routes at startup
 @app.before_request

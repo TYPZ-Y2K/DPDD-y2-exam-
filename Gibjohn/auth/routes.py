@@ -101,7 +101,7 @@ def login():
 
         next_url = request.args.get("next")
         if user.role == "tutor":
-            return redirect(next_url or url_for("tutor.tutor.dashboard"))
+            return redirect(next_url or url_for("tutor.tutor_dashboard"))
         if user.role == "learner":
             return redirect(next_url or url_for("learner.dashboard"))
     return render_template("auth/login.html", form=form)

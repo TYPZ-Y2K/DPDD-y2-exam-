@@ -1,0 +1,16 @@
+<!-- templates/learner/quiz.html -->
+{% extends "base.html" %}
+{% block title %}Quiz{% endblock %}
+{% block content %}
+<h1>Quiz Page</h1>
+<form method="POST" action="{{ url_for('learner.quiz') }}" novalidate>
+{{ form.hidden_tag() }}
+<!-- Example question -->
+<div class="form-row">
+    {{ form.question1.label }}
+    {{ form.question1() }}
+    {% for err in form.question1.errors %}<p class="error">{{ err }}</p>{% endfor %}
+</div>
+{{ form.submit(class_="btn") }}
+</form>
+{% endblock %}

@@ -40,25 +40,31 @@ class ClassEnrollment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
     enrolled_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))  # enrollment timestamp
 
-class Resource(db.Model):
+class Resources(db.Model):
     __tablename__ = 'resources'
     resource_id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(16), nullable=False)
-    subject = db.Column(db.String(16), nullable=False)  # e.g. Math, Science
-    type = db.Column(db.String(16), nullable=False)  # e.g. video, article, quiz
-    description = db.Column(db.Text)  # brief description
-    url = db.Column(db.String(255), nullable=False)  # link to resource
-    owner_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)  # who added it
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))  # when added
+    title = db.Column(db.String(120), nullable=False)
+    subject = db.Column(db.String(16), nullable=False, default="misc")
+    type = db.Column(db.String(16), nullable=False, default="file")  # 'file' | 'link'
+    description = db.Column(db.Text)
+    url = db.Column(db.String(255))  # for links
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    path = db.Column(db.String(255))
+    mime = db.Column(db.String(64))
+    size = db.Column(db.Integer)
+
 
 class Assignment(db.Model):
     __tablename__ = 'assignments'
     assignment_id = db.Column(db.Integer, primary_key=True)
-    resource_id = db.Column(db.Integer, db.ForeignKey('resources.resource_id'), nullable=False)  # linked resource
-    class_id = db.Column(db.Integer, db.ForeignKey('classes.class_id'), nullable=False)  # assigned class
-    title = db.Column(db.String(120), nullable=False)  # assignment title
-    due_date = db.Column(db.DateTime)  # optional due date
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))  # when assigned
+    resource_id   = db.Column(db.Integer, db.ForeignKey('resources.resource_id'), nullable=False)
+    class_id      = db.Column(db.Integer, db.ForeignKey('classes.class_id'), nullable=False)
+    title         = db.Column(db.String(120), nullable=False)
+    due_date      = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime,nullable=False,default=lambda: datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime,nullable=False,default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc))
 
 class Submission(db.Model):
     __tablename__ = 'submissions'

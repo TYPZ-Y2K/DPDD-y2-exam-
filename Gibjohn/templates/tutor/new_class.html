@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Create new class{% endblock %}
+{% block content %}
+<h1>Create new class</h1>
+{{ form.hidden_tag() }}
+
+
+<form method="POST" action="{{ url_for('tutor.new_class') }}" class="card">
+{{ form.hidden_tag() }}
+<label>Title <input name="title" required></label>
+<label>Subject <input name="subject" required></label>
+<label>Year group <input name="year_group" type="number" min="1" max="13" required></label>
+<button class="btn btn-primary">Create class</button>
+</form>
+{% endblock %}

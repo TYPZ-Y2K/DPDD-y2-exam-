@@ -3,6 +3,7 @@
 
 {% block content %}
 <section class="dash-top">
+{{form.hidden_tag()}}
 <h1>Hi {{ current_user.full_name or "there" }}…</h1>
 
 <div class="xp-card" role="group" aria-labelledby="xp-label level-label">

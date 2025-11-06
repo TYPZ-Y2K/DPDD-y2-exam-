@@ -328,6 +328,14 @@ margin-top: auto;
 .class-cards{ grid-template-columns:1fr; }
 }
 
+.dropzone{
+border:2px dashed #7c3aed; border-radius:12px; padding:1rem; background:#faf8ff;
+display:grid; gap:.5rem; outline:none;
+}
+.dropzone.drag{ background:#f3eaff; }
+.file-list{ list-style:none; margin:0; padding:0; display:grid; gap:.25rem; }
+.file-list li{ background:#fff; border:1px solid #eee; border-radius:8px; padding:.35rem .5rem; }
+
 
 
 /* style.css */

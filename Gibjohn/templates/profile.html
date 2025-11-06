@@ -3,7 +3,7 @@
 {% block content %}
 <h2>Profile</h2>
 
-<form method="POST" action="{{ url_for('profile') }}" class="form" novalidate>
+<form method="POST" action="{{ url_for('auth.profile') }}" class="form" novalidate>
 {{ form.hidden_tag() }}
 
 <label>{{ form.full_name.label }} {{ form.full_name() }}</label>
@@ -19,7 +19,7 @@
 <section class="danger">
 <h3>Delete Account</h3>
 <p>This action is permanent. Your profile and data will be removed.</p>
-<form method="POST" action="{{ url_for('profile') }}" class="form" novalidate>
+<form method="POST" action="{{ url_for('auth.profile') }}" class="form" novalidate>
     {{ delete_form.hidden_tag() }}
     <label>{{ delete_form.password.label }} {{ delete_form.password() }}</label>
     {% for err in delete_form.password.errors %}<p class="error">{{ err }}</p>{% endfor %}
