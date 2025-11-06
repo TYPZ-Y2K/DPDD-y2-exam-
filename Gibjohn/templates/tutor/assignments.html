@@ -1,62 +1,78 @@
 {# templates/tutor/assignments.html #}
 {% extends "base.html" %}
 {% block title %}Assignments · Tutor{% endblock %}
+
 {% block content %}
 <h1>Assignments</h1>
 
-<form method="POST" action="{{ url_for('tutor.assignments_create') }}" class="card">
+<form method="POST" action="{{ url_for('tutor.assignments') }}" class="card" novalidate>
 {{ form.hidden_tag() }}
+
 <div class="form-row">
-<label>Title</label>
-<input name="title" required>
+<label>{{ form.title.label }}
+    {{ form.title(required=True) }}
+</label>
+{% for e in form.title.errors %}<p class="error">{{ e }}</p>{% endfor %}
 </div>
+
 <div class="form-row">
-<label>Class</label>
-<select name="class_id" required>  
-</select>
-</div>
-<div class="form-row">
-<label>Resource</label>
-<select name="resource_id" required>
-    <!-- likewise populate -->
-</select>
-</div>
-<div class="form-row">
-<label>Due date (optional)</label>
-<input type="datetime-local" name="due_date">
-</div>
-<button class="btn btn-primary">Add assignment</button>
+<label>{{ form.class_id.label }}
+    {{ form.class_id(required=True) }}
+</label>
 {% if not classes %}
-<p class="muted">No classes yet. <a href="{{ url_for('tutor.new_class') }}">Create one</a>.</p>
+    <p class="muted">No classes yet. <a href="{{ url_for('tutor.new_class') }}">Create one</a>.</p>
 {% endif %}
+{% for e in form.class_id.errors %}<p class="error">{{ e }}</p>{% endfor %}
+</div>
+
+<div class="form-row">
+<label>{{ form.resource_id.label }}
+    {{ form.resource_id(required=True) }}
+</label>
 {% if not resources %}
-<p class="muted">No resources yet. <a href="{{ url_for('tutor.resources') }}">Add resources</a>.</p>
+    <p class="muted">No resources yet. <a href="{{ url_for('tutor.resources') }}">Add resources</a>.</p>
 {% endif %}
+{% for e in form.resource_id.errors %}<p class="error">{{ e }}</p>{% endfor %}
+</div>
+
+<div class="form-row">
+<label>{{ form.due_date.label }}
+    {{ form.due_date() }}
+</label>
+{% for e in form.due_date.errors %}<p class="error">{{ e }}</p>{% endfor %}
+</div>
+
+{{ form.submit(class_="btn btn-primary") }}
 </form>
 
 <div class="card">
 <table class="table">
 <thead>
-    <tr><th>Title</th><th>Class</th><th>Due</th><th>Updated</th><th></th></tr>
+    <tr>
+    <th>Title</th><th>Class</th><th>Due</th><th>Created</th><th></th>
+    </tr>
 </thead>
 <tbody>
-    {% for a in assignments %}
+{% for a in assignments %}
     <tr>
     <td>{{ a.title }}</td>
-    <td>{{ a.class_id }}</td>
-    <td>{{ a.due_date or '—' }}</td>
-    <td>{{ a.updated_at }}</td>
+    <td>
+        {# If relationships exist, show a.class_.title; else fallback to id #}
+        {% set cls = classes|selectattr('class_id', 'equalto', a.class_id)|first %}
+        {{ cls.title if cls else ('Class #' ~ a.class_id) }}
+    </td>
+    <td>{{ a.due_date.strftime('%Y-%m-%d %H:%M') if a.due_date else '—' }}</td>
+    <td>{{ a.created_at.strftime('%Y-%m-%d %H:%M') if a.created_at else '—' }}</td>
     <td>
         <form method="POST" action="{{ url_for('tutor.assignments_delete', assignment_id=a.assignment_id) }}">
-        {{ csrf_token() }}
+        {{ delete_form.hidden_tag() }}
         <button class="btn btn-ghost" onclick="return confirm('Delete this assignment?')">Delete</button>
         </form>
     </td>
     </tr>
-
-    {% else %}
+{% else %}
     <tr><td colspan="5">No assignments yet.</td></tr>
-    {% endfor %}
+{% endfor %}
 </tbody>
 </table>
 </div>

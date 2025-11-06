@@ -336,6 +336,29 @@ display:grid; gap:.5rem; outline:none;
 .file-list{ list-style:none; margin:0; padding:0; display:grid; gap:.25rem; }
 .file-list li{ background:#fff; border:1px solid #eee; border-radius:8px; padding:.35rem .5rem; }
 
+/* 1) Keep content inside the card corners */
+.card{
+overflow: hidden;                 /* clips the button inside rounded corners */
+}
+
+/* 2) Sidebar card layout + full-width button */
+.td-side .card{
+display: flex;
+flex-direction: column;
+}
+
+.td-side .card .leaderboard{
+margin-bottom: .75rem;
+}
+
+.td-side .card .btn.block{
+display: block;                   /* not inline-flex */
+width: 100%;
+max-width: 100%;
+align-self: stretch;
+margin-top: 1rem;
+box-sizing: border-box;           /* include padding in width */
+}
 
 
 /* style.css */

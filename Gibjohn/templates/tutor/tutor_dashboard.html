@@ -1,21 +1,23 @@
 {% extends "base.html" %}
 {% block title %}Tutor Dashboard — GibJohn Tutoring{% endblock %}
+
 {% block content %}
+<meta http-equiv="refresh" content="60">
 <section class="td-top">
 <h1>Hi {{ current_user.full_name or "Tutor" }}.</h1>
 
 <div class="kpi-wrap">
 <div class="kpi">
     <span class="kpi-label">Active classes</span>
-    <span class="kpi-value">{{ kpi_active_classes|default(3) }}</span>
+    <span class="kpi-value">{{ kpi_active_classes }}</span>
 </div>
 <div class="kpi">
     <span class="kpi-label">Total Students</span>
-    <span class="kpi-value">{{ kpi_students|default(53) }}</span>
+    <span class="kpi-value">{{ kpi_students }}</span>
 </div>
 <div class="kpi">
     <span class="kpi-label">Assignments</span>
-    <span class="kpi-value">{{ kpi_assignments|default(5) }}</span>
+    <span class="kpi-value">{{ kpi_assignments }}</span>
 </div>
 </div>
 </section>
@@ -26,27 +28,23 @@
 <!-- My classes -->
 <div class="card">
     <h2>My classes</h2>
-
     <div class="class-cards">
-    {% set classes = classes or [
-        {'title':'Maths – Year 8 Set 2','students':24,'progress':58},
-        {'title':'Maths – Year 9 Set 1','students':19,'progress':82},
-        {'title':'Maths – Year 7 Set 6','students':10,'progress':35},
-    ] %}
     {% for c in classes %}
-    <article class="class-card">
+        <article class="class-card">
         <h3 class="class-title">{{ c.title }}</h3>
         <p class="class-sub">{{ c.students }} students</p>
         <div class="meter small">
-        <div class="bar" role="progressbar"
+            <div class="bar" role="progressbar"
                 aria-valuemin="0" aria-valuemax="100"
                 aria-valuenow="{{ c.progress }}">
             <div class="fill" style="--p: {{ c.progress }}%"></div>
             <span class="pct">{{ c.progress }}%</span>
-        </div>
+            </div>
         </div>
         <a href="#" class="btn btn-ghost">View Students</a>
-    </article>
+        </article>
+    {% else %}
+        <p class="muted">No classes yet. <a href="{{ url_for('tutor.new_class') }}">Create one</a>.</p>
     {% endfor %}
     </div>
 </div>
@@ -54,30 +52,34 @@
 <!-- Assignments table -->
 <div class="card">
     <h2>Assignments</h2>
-    {% set assignments = assignments or [
-    {'title':'Fractions Basics','due':'2 May','submissions':'21/24','link':'#'},
-    {'title':'Fractions Basics','due':'2 May','submissions':'21/24','link':'#'},
-    {'title':'Fractions Basics','due':'2 May','submissions':'21/24','link':'#'},
-    ] %}
     <div class="table-wrap">
     <table class="table">
         <caption class="sr-only">Recent assignments with due dates and submission counts</caption>
         <thead>
         <tr>
-        <th scope="col">Assignment</th>
-        <th scope="col">Due</th>
-        <th scope="col">Submissions</th>
-        <th scope="col"><span class="sr-only">Open</span></th>
+            <th scope="col">Assignment</th>
+            <th scope="col">Due</th>
+            <th scope="col">Submissions</th>
+            <th scope="col"><span class="sr-only">Open</span></th>
         </tr>
         </thead>
         <tbody>
         {% for a in assignments %}
-        <tr>
-        <td>{{ a.title }}</td>
-        <td>{{ a.due }}</td>
-        <td>{{ a.submissions }}</td>
-        <td class="t-right"><a href="{{ a.link }}" aria-label="Open {{ a.title }}">›</a></td>
-        </tr>
+            <tr>
+            <td>{{ a.title }}</td>
+            <td>
+{% if a.due_date %}
+{{ a.due_date|dt }}
+{% elif a.due %}
+{{ a.due }}
+{% else %}—{% endif %}
+</td>
+
+            <td>{{ a.submissions }}</td>
+            <td class="t-right"><a href="{{ a.link }}" aria-label="Open {{ a.title }}">›</a></td>
+            </tr>
+        {% else %}
+            <tr><td colspan="4">No assignments yet.</td></tr>
         {% endfor %}
         </tbody>
     </table>
@@ -85,39 +87,28 @@
 </div>
 </div>
 
-<!-- Right column (sidebar) -->
+<!-- Right column -->
 <aside class="td-side">
 <div class="card">
     <h2>Recent Activity</h2>
     <div class="activity" role="status" aria-live="polite">
-    {% set recent = recent or [
-        "Shubomi completed Quiz 3 (+300XP)",
-        "Denzel unlocked badge — Mathematical machine",
-    ] %}
     {% for item in recent %}
         <p class="activity-item">{{ item }}</p>
+    {% else %}
+        <p class="muted">No recent activity.</p>
     {% endfor %}
     </div>
 </div>
 
 <div class="card">
-    <h2>Assignments</h2>
-    <p class="muted">Submitted in Year 9 Set 1</p>
-</div>
-
-<div class="card">
     <h2>Leaderboard</h2>
-    {% set leaderboard = leaderboard or [
-    {"name":"Shubomi","xp":"2800XP"},
-    {"name":"Bolaji","xp":"2650XP"},
-    {"name":"Denzil","xp":"2500XP"},
-    ] %}
     <ul class="leaderboard">
     {% for row in leaderboard %}
-    <li><span>{{ row.name }}</span><span class="lb-xp">{{ row.xp }}</span></li>
+        <li><span>{{ row.name }}</span><span class="lb-xp">{{ row.xp }}</span></li>
+    {% else %}
+        <li><span>No data yet</span><span class="lb-xp">0 XP</span></li>
     {% endfor %}
     </ul>
-
     <a class="btn btn-primary block" href="{{ url_for('tutor.assignments') }}">Create new assignments</a>
 </div>
 </aside>

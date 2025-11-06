@@ -2,14 +2,31 @@
 {% block title %}Create new class{% endblock %}
 {% block content %}
 <h1>Create new class</h1>
+
+<form method="POST" action="{{ url_for('tutor.new_class') }}" class="card" novalidate>
 {{ form.hidden_tag() }}
 
+<div class="form-row">
+<label>{{ form.title.label }}
+    {{ form.title(required=True) }}
+</label>
+{% for e in form.title.errors %}<p class="error">{{ e }}</p>{% endfor %}
+</div>
 
-<form method="POST" action="{{ url_for('tutor.new_class') }}" class="card">
-{{ form.hidden_tag() }}
-<label>Title <input name="title" required></label>
-<label>Subject <input name="subject" required></label>
-<label>Year group <input name="year_group" type="number" min="1" max="13" required></label>
-<button class="btn btn-primary">Create class</button>
+<div class="form-row">
+<label>{{ form.subject.label }}
+    {{ form.subject(required=True) }}
+</label>
+{% for e in form.subject.errors %}<p class="error">{{ e }}</p>{% endfor %}
+</div>
+
+<div class="form-row">
+<label>{{ form.year_group.label }}
+    {{ form.year_group(min=1, max=13, required=True) }}
+</label>
+{% for e in form.year_group.errors %}<p class="error">{{ e }}</p>{% endfor %}
+</div>
+
+{{ form.submit(class_="btn btn-primary") }}
 </form>
 {% endblock %}

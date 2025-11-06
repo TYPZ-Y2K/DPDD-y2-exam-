@@ -2,18 +2,17 @@
 from datetime import datetime, timezone
 import mimetypes
 import os
-
 from flask import (
     render_template, request, redirect, url_for, flash,
     current_app, send_from_directory
 )
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
-
-from models import db, Resources, Class, Assignment
+from models import db, Resources, Class, Assignment, ClassEnrollment, Submission, User, ActivityLog
+from sqlalchemy import func, desc
 from . import bp  # blueprint
 from flask_wtf import FlaskForm
-from tutor.forms import ResourceForm
+from tutor.forms import ResourceForm, ClassForm, AssignmentForm
 
 # --- tiny CSRF-only form for small POST actions (e.g., create/delete buttons)
 class EmptyForm(FlaskForm):
@@ -24,65 +23,154 @@ class EmptyForm(FlaskForm):
 @bp.route("/tutor/dashboard")
 @login_required
 def tutor_dashboard():
-    # If your template has any quick actions (POST buttons), pass a CSRF form
-    return render_template("tutor_dashboard.html", form=EmptyForm())
+    classes = (Class.query
+            .filter_by(tutor_id=current_user.user_id)
+            .order_by(desc(Class.created_at))
+            .all())
 
+    # KPI: active classes
+    kpi_active_classes = len(classes)
 
-# ---------- Assignments ----------
-@bp.route("/assignments", methods=["GET"])
-@login_required
-def assignments():
-    # IMPORTANT: created_at must be a real db.Column, no trailing comma in model
-    items = Assignment.query.order_by(Assignment.created_at.desc()).all()
-    classes = Class.query.all()
-    resources = Resources.query.all()
+    # KPI: total students across those classes (distinct)
+    kpi_students = (db.session.query(func.count(func.distinct(ClassEnrollment.user_id)))
+                    .join(Class, Class.class_id == ClassEnrollment.class_id)
+                    .filter(Class.tutor_id == current_user.user_id)
+                    .scalar() or 0)
+
+    # KPI: total assignments this tutor has created (via their classes)
+    kpi_assignments = (db.session.query(func.count(Assignment.assignment_id))
+                        .join(Class, Class.class_id == Assignment.class_id)
+                        .filter(Class.tutor_id == current_user.user_id)
+                        .scalar() or 0)
+
+    # Precompute class sizes for denominator in “submissions x/y”
+    class_sizes_sq = (db.session.query(
+                        ClassEnrollment.class_id.label("cid"),
+                        func.count(ClassEnrollment.user_id).label("size"))
+                        .group_by(ClassEnrollment.class_id)
+                        ).subquery()
+
+    # Recent assignments + submissions count + class size
+    rows = (db.session.query(
+                Assignment.assignment_id,
+                Assignment.title,
+                Assignment.due_date,
+                Class.class_id,
+                func.coalesce(class_sizes_sq.c.size, 0).label("class_size"),
+                func.count(Submission.submission_id).label("submitted"))
+            .join(Class, Assignment.class_id == Class.class_id)
+            .outerjoin(Submission, Submission.assignment_id == Assignment.assignment_id)
+            .outerjoin(class_sizes_sq, class_sizes_sq.c.cid == Class.class_id)
+            .filter(Class.tutor_id == current_user.user_id)
+            .group_by(Assignment.assignment_id, Class.class_id, class_sizes_sq.c.size)
+            .order_by(desc(Assignment.created_at))
+            .limit(10)
+            .all())
+
+    assignments_tbl = [{
+        "title": r.title,
+        "due": r.due_date,                          # format in template
+        "submissions": f"{r.submitted}/{r.class_size}",
+        "link": url_for("tutor.assignments")        # deep-link if you add a detail page later
+    } for r in rows]
+
+    # Leaderboard: simple example = sum of submission scores for students in this tutor’s classes
+    leaderboard_rows = (db.session.query(
+                            User.full_name,
+                            func.coalesce(func.sum(Submission.score), 0).label("xp"))
+                        .join(Submission, Submission.user_id == User.user_id)
+                        .join(Assignment, Assignment.assignment_id == Submission.assignment_id)
+                        .join(Class, Class.class_id == Assignment.class_id)
+                        .filter(Class.tutor_id == current_user.user_id)
+                        .group_by(User.user_id, User.full_name)
+                        .order_by(desc("xp"))
+                        .limit(10)
+                        .all())
+
+    leaderboard = [{"name": n or "Student", "xp": f"{int(xp)} XP"} for (n, xp) in leaderboard_rows]
+
+    # Recent activity: activity for students enrolled in this tutor’s classes
+    student_ids_sq = (db.session.query(ClassEnrollment.user_id)
+                        .join(Class, Class.class_id == ClassEnrollment.class_id)
+                        .filter(Class.tutor_id == current_user.user_id)
+                        ).subquery()
+
+    recent_acts = (ActivityLog.query
+                    .filter(ActivityLog.user_id.in_(student_ids_sq))
+                    .order_by(desc(ActivityLog.timestamp))
+                    .limit(8)
+                    .all())
+    recent = [f"{a.action}" for a in recent_acts]
+
+    # Class cards (title, student count, progress % placeholder)
+    class_sizes_map = dict((cid, size) for cid, size in
+                            db.session.query(class_sizes_sq.c.cid, class_sizes_sq.c.size).all())
+    class_cards = [{
+        "title": c.title,
+        "students": class_sizes_map.get(c.class_id, 0),
+        # TODO: replace with real progress logic per class
+        "progress": 0
+    } for c in classes]
+
     return render_template(
-        "tutor/assignments.html",
-        assignments=items,
-        classes=classes,
-        resources=resources,
-        form=EmptyForm(),  # for inline create/delete forms
+        "tutor/tutor_dashboard.html",
+        kpi_active_classes=kpi_active_classes,
+        kpi_students=kpi_students,
+        kpi_assignments=kpi_assignments,
+        classes=class_cards,
+        assignments=assignments_tbl,
+        recent=recent,
+        leaderboard=leaderboard,
     )
 
 
-@bp.route("/assignments/new", methods=["POST"])
+# ---------- Assignments ----------
+def _assignment_form_with_choices():
+    form = AssignmentForm()
+    # Classes and resources for the selects
+    cls = Class.query.order_by(Class.title.asc()).all()
+    res = Resources.query.order_by(Resources.title.asc()).all()
+    form.class_id.choices = [(c.class_id, f"{c.title} · Y{c.year_group}") for c in cls]
+    form.resource_id.choices = [(r.resource_id, r.title) for r in res]
+    return form, cls, res
+
+@bp.route("/assignments", methods=["GET", "POST"])
 @login_required
-def assignments_create():
-    # enforce CSRF
-    form = EmptyForm()
-    if not form.validate_on_submit():
-        flash("Invalid or expired form. Please try again.", "error")
+def assignments():
+    # One route handles both rendering and creation
+    form, classes, resources = _assignment_form_with_choices()
+
+    if form.validate_on_submit():
+        a = Assignment(
+            title=form.title.data.strip(),
+            class_id=form.class_id.data,
+            resource_id=form.resource_id.data,
+        )
+        if form.due_date.data:
+            a.due_date = form.due_date.data  # already a datetime from WTForms
+        db.session.add(a)
+        db.session.commit()
+        flash("Assignment created.", "success")
         return redirect(url_for("tutor.assignments"))
 
-    title = (request.form.get("title") or "").strip()
-    class_id = request.form.get("class_id", type=int)
-    resource_id = request.form.get("resource_id", type=int)
-    due_iso = request.form.get("due_date")  # optional datetime-local string
-
-    if not title or not class_id or not resource_id:
-        flash("Please fill title, class and resource.", "error")
-        return redirect(url_for("tutor.assignments"))
-
-    a = Assignment(title=title, class_id=class_id, resource_id=resource_id)
-    # Optional: parse ISO datetime if provided
-    if due_iso:
-        try:
-            a.due_date = datetime.fromisoformat(due_iso)
-        except ValueError:
-            flash("Could not parse due date. Please use a valid date/time.", "warn")
-
-    db.session.add(a)
-    db.session.commit()
-    flash("Assignment created.", "success")
-    return redirect(url_for("tutor.assignments"))
-
+    # List existing assignments (newest first)
+    items = Assignment.query.order_by(Assignment.created_at.desc()).all()
+    delete_form = EmptyForm()
+    return render_template(
+        "tutor/assignments.html",
+        form=form,
+        assignments=items,
+        classes=classes,
+        resources=resources,
+        delete_form=delete_form,
+    )
 
 @bp.route("/assignments/<int:assignment_id>/delete", methods=["POST"])
 @login_required
 def assignments_delete(assignment_id):
-    # enforce CSRF
-    form = EmptyForm()
-    if not form.validate_on_submit():
+    # CSRF for delete button
+    delete_form = EmptyForm()
+    if not delete_form.validate_on_submit():
         flash("Invalid or expired form. Please try again.", "error")
         return redirect(url_for("tutor.assignments"))
 
@@ -101,35 +189,25 @@ def assignments_delete(assignment_id):
 @bp.route("/classes/new", methods=["GET", "POST"])
 @login_required
 def new_class():
-    if request.method == "POST":
-        # enforce CSRF
-        form = EmptyForm()
-        if not form.validate_on_submit():
-            flash("Invalid or expired form. Please try again.", "error")
-            return redirect(url_for("tutor.new_class"))
+    form = ClassForm()
 
-        title = (request.form.get("title") or "").strip()
-        subject = (request.form.get("subject") or "").strip()
-        year_group = request.form.get("year_group", type=int)
-
-        if not title or not subject or not year_group:
-            flash("Please fill all fields.", "error")
-            return redirect(url_for("tutor.new_class"))
-
-        db.session.add(
-            Class(
-                title=title,
-                subject=subject,
-                year_group=year_group,
-                tutor_id=current_user.user_id,
-            )
+    if form.validate_on_submit():
+        c = Class(
+            title=form.title.data.strip(),
+            subject=form.subject.data.strip(),
+            year_group=form.year_group.data,
+            tutor_id=current_user.user_id,
         )
+        db.session.add(c)
         db.session.commit()
         flash("Class created.", "success")
         return redirect(url_for("tutor.assignments"))
 
-    # GET
-    return render_template("tutor/new_class.html", form=EmptyForm())
+    # (Optional) log errors during dev
+    if form.errors:
+        print("CLASS FORM ERRORS:", form.errors)
+
+    return render_template("tutor/new_class.html", form=form)
 
 
 # ---------- Resources (files + links) ----------
