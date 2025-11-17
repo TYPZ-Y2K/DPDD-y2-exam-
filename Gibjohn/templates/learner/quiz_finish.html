@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Quiz Complete — {{ assignment.title }}{% endblock %}
+
+{% block content %}
+<section class="card" style="max-width:680px; margin:auto; display:grid; gap:1rem;">
+<h1>✅ Quiz Complete</h1>
+<p><strong>{{ assignment.title }}</strong></p>
+
+<div class="meter" aria-label="Score">
+<span class="label">Score:</span>
+<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ score }}">
+    <div class="fill" style="--p: {{ score }}%"></div>
+    <span class="pct">{{ score }}%</span>
+</div>
+</div>
+
+<p>You got <strong>{{ correct }}/{{ total }}</strong> correct.</p>
+<p><strong>{{ xp_awarded }}</strong> XP awarded 🎉</p>
+
+<div style="display:flex; gap:.5rem; justify-content:flex-end;">
+<a class="btn btn-secondary" href="{{ url_for('learner.lesson', assignment_id=assignment.assignment_id) }}">Back to Lesson</a>
+<a class="btn btn-primary" href="{{ url_for('learner.dashboard') }}">Go to Dashboard</a>
+</div>
+</section>
+{% endblock %}

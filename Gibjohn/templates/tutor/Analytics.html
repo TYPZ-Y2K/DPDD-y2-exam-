@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Analytics{% endblock %}
+{% block content %}
+<h1>Average score by subject</h1>
+<table>
+<thead><tr><th>Subject</th><th>Avg %</th></tr></thead>
+<tbody>
+{% for subj, avg in rows %}
+    <tr><td>{{ subj }}</td><td>{{ (avg or 0)|round(1) }}</td></tr>
+{% else %}
+    <tr><td colspan="2">No data yet.</td></tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

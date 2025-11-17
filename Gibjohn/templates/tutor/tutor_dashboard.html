@@ -26,7 +26,7 @@
 <!-- Left column -->
 <div class="td-main">
 <!-- My classes -->
-<div class="card">
+<div class="flex-card card">
     <h2>My classes</h2>
     <div class="class-cards">
     {% for c in classes %}
@@ -41,7 +41,11 @@
             <span class="pct">{{ c.progress }}%</span>
             </div>
         </div>
-        <a href="#" class="btn btn-ghost">View Students</a>
+        {% if c.class_id %}
+<a href="{{ url_for('tutor.manage_students', class_id=c.class_id) }}" class="btn btn-ghost">View Students</a>
+{% else %}
+<span class="btn btn-ghost" aria-disabled="true">View Students</span>
+{% endif %}
         </article>
     {% else %}
         <p class="muted">No classes yet. <a href="{{ url_for('tutor.new_class') }}">Create one</a>.</p>
@@ -50,7 +54,7 @@
 </div>
 
 <!-- Assignments table -->
-<div class="card">
+<div class="flex-card card">
     <h2>Assignments</h2>
     <div class="table-wrap">
     <table class="table">
@@ -68,12 +72,13 @@
             <tr>
             <td>{{ a.title }}</td>
             <td>
-{% if a.due_date %}
-{{ a.due_date|dt }}
-{% elif a.due %}
-{{ a.due }}
-{% else %}—{% endif %}
-</td>
+    {% if a.due_date %}
+        {{ a.due_date|dt }}
+    {% elif a.due %}
+        {{ a.due }}
+    {% else %}—{% endif %}
+    </td>
+
 
             <td>{{ a.submissions }}</td>
             <td class="t-right"><a href="{{ a.link }}" aria-label="Open {{ a.title }}">›</a></td>
@@ -89,7 +94,7 @@
 
 <!-- Right column -->
 <aside class="td-side">
-<div class="card">
+<div class="card activity-card">
     <h2>Recent Activity</h2>
     <div class="activity" role="status" aria-live="polite">
     {% for item in recent %}
@@ -100,17 +105,23 @@
     </div>
 </div>
 
-<div class="card">
+<div class="card flex-card leaderboard-card">
     <h2>Leaderboard</h2>
     <ul class="leaderboard">
-    {% for row in leaderboard %}
-        <li><span>{{ row.name }}</span><span class="lb-xp">{{ row.xp }}</span></li>
-    {% else %}
-        <li><span>No data yet</span><span class="lb-xp">0 XP</span></li>
-    {% endfor %}
-    </ul>
-    <a class="btn btn-primary block" href="{{ url_for('tutor.assignments') }}">Create new assignments</a>
+        <li><span>Shubomi</span><span class="lb-xp">2800 XP</span></li>
+        <li><span>Bolaji</span><span class="lb-xp">2650 XP</span></li>
+        <li><span>Denzil</span><span class="lb-xp">2500 XP</span></li>
+</ul>
+<a class="btn btn-primary block" href="{{ url_for('tutor.assignments') }}">
+Create new assignments
+</a>
 </div>
+<div class="card">
+<h2>Analytics</h2>
+<p class="muted">View student progress and class performance.</p>
+<a class="btn btn-secondary block" href="{{ url_for('tutor.analytics') }}">Open Analytics</a>
+</div>
+
 </aside>
 </section>
 {% endblock %}

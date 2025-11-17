@@ -4,7 +4,7 @@
 {% block content %}
 <header class="site-hero" role="banner" aria-labelledby="hero-title">
   <div class="container">
-    <h1 id="hero-title">GibJohn Tutoring</h1>
+    <img src="/static/css/js/img/GibJohn_Tutoring_logo-bg.png" alt="GibJohn Tutoring Logo" style="height: 500px; width: 500px;">
     <p class="tagline">Track progress. Take quizzes. Earn achievements.</p>
 
     {% if current_user.is_authenticated and current_user.role == 'learner' %}

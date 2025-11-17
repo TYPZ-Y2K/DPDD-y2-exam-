@@ -1,0 +1,70 @@
+{# templates/tutor/manage_students.html #}
+{% extends "base.html" %}
+{% block title %}Manage Students — {{ class_.title }}{% endblock %}
+
+{% block content %}
+<h1>Manage students — {{ class_.title }}</h1>
+<p class="muted">Subject: <strong>{{ class_.subject }}</strong> · Year group: <strong>{{ class_.year_group }}</strong></p>
+
+<section class="card">
+<h2>Add a student</h2>
+<form method="post" class="form-inline" action="{{ url_for('tutor.manage_students', class_id=class_.class_id) }}">
+{{ search_form.hidden_tag() }}
+<label for="q">Student name</label>
+{{ search_form.q(id="q", placeholder="e.g. Shubomi Priestley") }}
+{{ search_form.submit_search(class_="btn") }}
+</form>
+<p class="muted" style="margin-top:.5rem;">Type at least 2 characters. We’ll show up to 10 matches.</p>
+</section>
+
+{% if results %}
+<section class="card">
+<h3>Matches</h3>
+<ul style="list-style:none; padding-left:0; display:grid; gap:.5rem;">
+{% for u in results %}
+<li style="display:flex; gap:.75rem; align-items:center; justify-content:space-between; background:#f8f9ff; padding:.5rem .75rem; border-radius:.5rem;">
+    <div>
+    <strong>{{ u.full_name or "—" }}</strong><br>
+    <span class="muted">{{ u.email }}</span>
+    </div>
+
+<form method="post" style="margin:0;" action="{{ url_for('tutor.manage_students', class_id=class_.class_id) }}">
+{{ confirm_form.csrf_token }}                     {# keep CSRF #}
+{{ confirm_form.class_id(value=class_.class_id) }}  {# IMPORTANT #}
+{{ confirm_form.user_id(value=u.user_id) }}         {# IMPORTANT #}
+{{ confirm_form.submit_add(class_="btn") }}
+</form>
+
+</li>
+{% endfor %}
+</ul>
+</section>
+{% endif %}
+
+<section class="card">
+<h2>Current students ({{ students|length }})</h2>
+<table class="table">
+<thead><tr><th>Name</th><th>Email</th></tr></thead>
+<tbody>
+    {% for s in students %}
+    <tr><td>{{ s.full_name or "—" }}</td><td>{{ s.email }}</td></tr>
+    {% else %}
+    <tr><td colspan="2">No students enrolled yet.</td></tr>
+    {% endfor %}
+</tbody>
+</table>
+</section>
+
+<style>
+.form-inline { display:grid; grid-template-columns: 160px 1fr auto; gap:.75rem; align-items:end; }
+.table { width:100%; border-collapse:collapse; }
+.table th, .table td { padding:.6rem .5rem; border-top:1px solid #e5e7eb; text-align:left; }
+.table thead th { border-top:none; }
+.btn { display:inline-block; padding:.55rem .9rem; border-radius:.5rem; background:#5a23b5; color:#fff; border:0; cursor:pointer; }
+.muted { color:#666; }
+@media (max-width:640px){ .form-inline { grid-template-columns:1fr; } }
+</style>
+{% endblock %}
+
+
+

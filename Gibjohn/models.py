@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
     __tablename__ = "users"
 
     user_id      = db.Column(db.Integer, primary_key=True)
-    role         = db.Column(db.String(16), nullable=False)   # "student" | "tutor" | "guardian"
+    role         = db.Column(db.String(16), nullable=False)   # "learner" | "tutor" | "guardian"
     email        = db.Column(db.String(120), unique=True, index=True, nullable=False)
     password_hash= db.Column(db.Text, nullable=False)
     full_name    = db.Column(db.String(120))
@@ -218,5 +218,3 @@ class ActivityLog(db.Model):
 
     def __repr__(self):
         return f"<Activity {self.activity_id} u={self.user_id} {self.action[:24]}>"
-
-

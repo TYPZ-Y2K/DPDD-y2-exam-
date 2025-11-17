@@ -1,10 +1,30 @@
-Flask
-Flask-WTF
-Flask-Migrate
-Flask-Limiter
-Flask-Talisman
-Flask-Login
-Flask-SQLAlchemy
-SQLAlchemy
-WTForms
-email-validator
+# --- Core Framework ---
+Flask==3.0.3
+Flask-SQLAlchemy==3.1.1
+Flask-WTF==1.2.1
+Flask-Login==0.6.3
+
+# --- Security & Validation ---
+email-validator==2.1.1
+Werkzeug==3.0.2
+bcrypt==4.1.2
+
+# --- Optional / Enhancements (used or mentioned) ---
+Flask-Talisman==1.1.0       # for CSP & HTTPS headers
+Flask-Limiter==3.5.0         # rate limiting
+Flask-Migrate==4.0.5         # if you used Alembic migrations
+
+# --- Database ---
+SQLAlchemy==2.0.31
+
+# --- Testing & utilities (optional for dev) ---
+pytest==8.2.2
+python-dotenv==1.0.1
+
+# --- Charting / front-end extras (if analytics page used Chart.js) ---
+# Chart.js is client-side JS; no Python package needed.
+
+# --- Misc helpers ---
+itsdangerous==2.2.0
+Jinja2==3.1.4
+WTForms==3.1.2

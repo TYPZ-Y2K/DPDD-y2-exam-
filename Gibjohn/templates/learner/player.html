@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ assignment.title }} — Player · GibJohn{% endblock %}
+
+{% block content %}
+<div class="card player-head">
+<div class="brand-row">
+<strong>GibJohn Tutoring</strong>
+<nav class="brand-nav">
+    <a href="{{ url_for('learner.dashboard') }}">Home</a>
+    <a href="{{ url_for('privacy') }}">Privacy</a>
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+    <a class="btn btn-secondary" href="{{ url_for('learner.lesson', assignment_id=assignment.assignment_id) }}">Save &amp; Exit</a>
+</nav>
+</div>
+
+<div class="crumbs" style="margin-top:.25rem;">
+{{ assignment.class_.subject|default('Subject')|capitalize }} ›
+<strong>{{ assignment.title }}</strong>
+</div>
+</div>
+
+<div class="card player-stage">
+<div class="player-frame">
+{% if embed_src %}
+    <iframe
+    src="{{ embed_src }}"
+    title="Lesson"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+    referrerpolicy="origin-when-cross-origin"
+    sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
+    ></iframe>
+{% else %}
+    <a class="thumb-link" href="{{ assignment.resource.url if assignment.resource else '#' }}" target="_blank" rel="noopener">
+    <img src="{{ url_for('static', filename='img/lesson_placeholder.png') }}" alt="Open lesson video">
+    <span class="play-badge">▶</span>
+    </a>
+{% endif %}
+</div>
+
+<div class="player-controls">
+<a class="btn btn-secondary" href="#">‹ Prev</a>
+<a class="btn btn-primary"
+    href="{{ url_for('learner.lesson_complete', assignment_id=assignment.assignment_id) }}">
+    Finish ›
+</a>
+</div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}{% endblock %}

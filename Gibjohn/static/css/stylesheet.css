@@ -234,10 +234,25 @@ padding:.8rem 1rem; text-align:center; font-size:.9rem; margin-top:auto;
 --r:12px;
 }
 
-.card{ background:var(--card); border-radius:var(--r); box-shadow:var(--shadow); padding:1rem; }
 
+.card{
+background:var(--card);
+border-radius:var(--r);
+box-shadow:var(--shadow);
+padding:1rem;
+/* no display:flex here */
+overflow:hidden; /* keeps rounded corners on inner content/buttons */
+}
+
+.flex-card{flex-direction: column; justify-content: space-between;
+}
 .td-top{ padding:.25rem 0 1rem; }
 .td-top h1{ margin:.25rem 0 1rem; }
+/* Sidebar cards (tasks/achievements) can also be forced flex) */
+.td-side .card{
+display:flex;
+flex-direction:column;
+}
 
 .kpi-wrap{ display:flex; gap:.75rem; flex-wrap:wrap; }
 .kpi{
@@ -252,8 +267,6 @@ display:grid; gap:.15rem;
 .td-side{ display:grid; gap:1rem; }
 .td-main{ display:grid; gap:1rem; }
 
-/* class cards */
-.class-cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:.75rem; }
 .class-card{
 background:linear-gradient(180deg, #efe7ff 0%, #ede9fe 100%);
 border-radius:12px; padding:.8rem; box-shadow:var(--shadow);
@@ -280,7 +293,7 @@ font-size:.75rem; font-weight:700; color:#083047;
 .t-right{ text-align:right; }
 
 /* activity & leaderboard */
-.activity{ display:grid; gap:.5rem; }
+.activity{ display: grid; gap:.5rem; }
 .activity-item{ margin:0; font-size:.95rem; }
 .muted{ color:var(--muted); margin:.25rem 0 0; }
 
@@ -360,6 +373,75 @@ margin-top: 1rem;
 box-sizing: border-box;           /* include padding in width */
 }
 
+/* lesson hub */
+.hub-actions { display:flex; gap:.75rem; flex-wrap:wrap; margin:.75rem 0 1rem; }
+.lesson-head{ display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.lesson-actions{ display:flex; gap:.5rem; flex-wrap:wrap; }
+
+.lesson-main{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.lesson-media img{ width:100%; border-radius:12px; box-shadow:0 4px 12px rgb(0 0 0 / 10%); }
+.thumb{ position:relative; display:block; }
+.lesson-media .thumb{
+position: relative;
+display: block;
+border-radius: 12px;
+overflow: hidden;            /* <— new */
+}
+.play-badge{ position:absolute; inset:auto auto 12px 12px; background:#0a7bdc; color:#fff;
+font-weight:700; border-radius:999px; padding:.25rem .6rem; box-shadow:0 6px 18px rgb(0 0 0 / 15%); }
+.lesson-info .bullets{ margin:.5rem 0 0; padding-left:1.25rem; }
+
+.pill-tabs{ display:flex; gap:.4rem; margin-bottom:.75rem; }
+.pill{ background:#eef4ff; border:none; padding:.45rem .8rem; border-radius:999px; font-weight:700; cursor:pointer; }
+.pill.active{ background:#0a7bdc; color:#fff; }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* crumbs */
+.crumbs{ color:#6b7280; font-size:.95rem; }
+.crumbs a{ color:#0a7bdc; }
+
+/* player */
+.player-head .brand-row{ display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.brand-nav{ display:flex; gap:.75rem; align-items:center; }
+.player-progress{ margin-top:.5rem; }
+.player-bar{ height:12px; background:#e6eef8; border-radius:999px; position:relative; overflow:hidden; }
+.player-bar span{ position:absolute; inset:0 auto 0 0; width:var(--p); background:#74d7e8; }
+
+.player-stage{ display:grid; gap:1rem; }
+.player-frame{ aspect-ratio: 16/9; background:#000; border-radius:12px; overflow:hidden; }
+.player-frame iframe, .player-frame video{ width:100%; height:100%; border:0; display:block; }
+
+.player-placeholder{ position:relative; width:100%; height:100%; display:grid; place-items:center; background:#001726; }
+.player-placeholder img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.5; }
+.play-big{ position:relative; z-index:1; font-size:42px; line-height:1; width:84px; height:84px; border-radius:50%;
+border:3px solid #fff; color:#fff; background:transparent; cursor:pointer; }
+
+.player-controls{ display:flex; justify-content:center; gap:.75rem; }
+
+/* lesson hero */
+.lesson-hero .hero-grid{
+display:grid; grid-template-columns: 1.2fr .8fr; gap:1rem; align-items:center;
+}
+.lesson-hero .hero-actions{
+display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.75rem;
+}
+.lesson-hero .hero-art .thumb-wrap{
+position:relative; display:block; border-radius:12px; overflow:hidden;
+}
+.lesson-hero .hero-art img{
+display:block; width:100%; height:auto;
+}
+.lesson-hero .thumb-play{
+position:absolute; inset:auto 12px 12px auto; background:rgba(0,0,0,.65);
+color:#fff; padding:.25rem .5rem; border-radius:8px; font-weight:700;
+}
+@media (max-width: 860px){
+.lesson-hero .hero-grid{ grid-template-columns:1fr; }
+}
+
+
+
 
 /* style.css */
 /* CSS for Flask app */
@@ -374,4 +456,3 @@ box-sizing: border-box;           /* include padding in width */
 /* Footer */
 /* Responsive design */
 /* Mobile adjustments */
-

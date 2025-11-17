@@ -21,6 +21,8 @@
 </label>
 {% if not classes %}
     <p class="muted">No classes yet. <a href="{{ url_for('tutor.new_class') }}">Create one</a>.</p>
+{% else %}
+    <p class="muted">Add more classes? <a href="{{ url_for('tutor.new_class') }}">Manage classes</a>.</p>
 {% endif %}
 {% for e in form.class_id.errors %}<p class="error">{{ e }}</p>{% endfor %}
 </div>
@@ -31,6 +33,8 @@
 </label>
 {% if not resources %}
     <p class="muted">No resources yet. <a href="{{ url_for('tutor.resources') }}">Add resources</a>.</p>
+{% else %}
+    <p class="muted">Add more resources? <a href="{{ url_for('tutor.resources') }}">Add resources</a>.</p>
 {% endif %}
 {% for e in form.resource_id.errors %}<p class="error">{{ e }}</p>{% endfor %}
 </div>

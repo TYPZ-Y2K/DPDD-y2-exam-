@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}Current Lesson — {{ assignment.title }}{% endblock %}
+
+{% block content %}
+<section class="lesson-top">
+<h1>Current Lesson</h1>
+
+<div class="xp-card">
+<div class="level"><span class="level-label">Level: <strong>{{ level|default(3) }}</strong></span></div>
+<div class="xp">
+    <span class="xp-label">XP:</span>
+    <div class="xp-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ xp|default(70) }}">
+    <div class="xp-fill" style="--p: {{ xp|default(70) }}%"></div>
+    <span class="xp-text">{{ xp|default(70) }}%</span>
+    </div>
+</div>
+</div>
+</section>
+
+<div class="card lesson-hero">
+<div class="crumbs">
+<a href="{{ url_for('learner.dashboard') }}">Home</a> › <span>Learning</span>
+</div>
+
+<div class="hero-grid">
+<div class="hero-main">
+    <h2 class="lesson-title">{{ assignment.title }}</h2>
+    <p class="lesson-sub">{{ assignment.class_.subject if assignment.class_ else 'Maths' }}</p>
+
+    <div class="hero-actions">
+    <a class="btn btn-primary" href="{{ url_for('learner.play_lesson', assignment_id=assignment.assignment_id) }}">Start Lesson</a>
+    <a class="btn btn-secondary" href="#">Practice</a>
+    <a class="btn btn-outline" href="#quizzes">Quiz</a>
+    </div>
+</div>
+
+<div class="hero-art">
+    {% if thumb_url %}
+    <a href="{{ url_for('learner.play_lesson', assignment_id=assignment.assignment_id) }}" class="thumb-wrap" aria-label="Play lesson">
+        <img src="{{ thumb_url }}" alt="Lesson thumbnail">
+        <span class="thumb-play">▶</span>
+    </a>
+    {% else %}
+    <div class="thumb-fallback">No thumbnail</div>
+    {% endif %}
+</div>
+</div>
+</div>
+
+<div class="card lesson-body">
+<div class="lesson-body-grid">
+<div class="left">
+    <h3>Objectives</h3>
+    <ul class="bullets">
+    <li>Review the definition of fractions</li>
+    <li>Understand how to simplify fractions</li>
+    <li>Practice comparing fractions</li>
+    </ul>
+    {% if assignment.due_date %}
+    <p class="muted">Due: {{ assignment.due_date.strftime('%d %b %Y %H:%M') }}</p>
+    {% endif %}
+</div>
+
+<!-- RIGHT COLUMN (wrap pills + panels inside here) -->
+<div class="right" id="quizzes">
+    <div class="pills" role="tablist" aria-label="Lesson tabs">
+    <button type="button" class="pill active" data-tab="tab-quizzes" aria-selected="true" role="tab">Quizzes</button>
+    <button type="button" class="pill" data-tab="tab-resources" aria-selected="false" role="tab">Resources</button>
+    <button type="button" class="pill" data-tab="tab-discussion" aria-selected="false" role="tab">Discussion</button>
+    </div>
+
+    <div class="tab-panels">
+    <div id="tab-quizzes" class="tab-panel active" role="tabpanel">
+        <table class="table">
+        <thead><tr><th>Title</th><th>Difficulty</th><th>XP</th><th></th></tr></thead>
+        <tbody>
+            {% for q in quizzes %}
+            <tr>
+            <td>{{ q.title }}</td>
+            <td>{{ q.difficulty }}</td>
+            <td>+{{ q.xp }} XP</td>
+            <td class="t-right">
+                <a class="btn btn-primary" href="{{ q.start_url }}">Start</a>
+            </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+
+    <div id="tab-resources" class="tab-panel" role="tabpanel" aria-hidden="true">
+        {% if assignment.resource %}
+        <p><a href="{{ assignment.resource.url or '#' }}" target="_blank" rel="noopener">Open linked resource</a></p>
+        {% if assignment.resource.description %}<p class="muted">{{ assignment.resource.description }}</p>{% endif %}
+        {% else %}
+        <p class="muted">No extra resources yet.</p>
+        {% endif %}
+    </div>
+
+    <div id="tab-discussion" class="tab-panel" role="tabpanel" aria-hidden="true">
+        <p class="muted">Discussion coming soon.</p>
+    </div>
+    </div>
+</div><!-- /right -->
+</div><!-- /lesson-body-grid -->
+</div><!-- /lesson-body -->
+{% endblock %}
+
+{% block extra_js %}
+<style>
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+/* optional: outline style the “Quiz” button */
+.btn.btn-outline{background:#fff;border:2px solid #0a7bdc;color:#0a7bdc}
+.btn.btn-outline:hover{background:#f0f7ff}
+/* hero layout */
+.lesson-hero .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:1rem;align-items:center}
+.lesson-hero .hero-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem}
+.lesson-hero .thumb-wrap{position:relative;display:block;border-radius:12px;overflow:hidden}
+.lesson-hero .thumb-play{position:absolute;right:12px;bottom:12px;background:rgba(0,0,0,.65);color:#fff;padding:.25rem .5rem;border-radius:8px;font-weight:700}
+@media (max-width:860px){.lesson-hero .hero-grid{grid-template-columns:1fr}}
+</style>
+
+<script>
+(function(){
+const pills  = document.querySelectorAll('.pills .pill');
+const panels = document.querySelectorAll('.tab-panel');
+pills.forEach(p => {
+p.addEventListener('click', () => {
+    pills.forEach(x => { x.classList.remove('active'); x.setAttribute('aria-selected','false'); });
+    p.classList.add('active'); p.setAttribute('aria-selected','true');
+    const id = p.dataset.tab;
+    panels.forEach(panel => {
+    const show = (panel.id === id);
+    panel.classList.toggle('active', show);
+    panel.setAttribute('aria-hidden', show ? 'false' : 'true');
+    });
+});
+});
+})();
+</script>
+{% endblock %}

@@ -25,6 +25,9 @@ csp = {
     "img-src": ["'self'", "data:"],
     "style-src": ["'self'", "'unsafe-inline'"],
     "script-src": ["'self'"],
+    "frame-src": ["https://www.youtube.com", "https://www.youtube-nocookie.com"],
+    "child-src": ["https://www.youtube.com", "https://www.youtube-nocookie.com"],
+    "connect-src": ["'self'"]
 }
 Talisman(app, content_security_policy=csp, force_https=False)  # set True in prod
 # init extensions

@@ -3,12 +3,14 @@
 
 {% block content %}
 <section class="dash-top">
-{{form.hidden_tag()}}
+{{ form.hidden_tag() }}
 <h1>Hi {{ current_user.full_name or "there" }}…</h1>
 
 <div class="xp-card" role="group" aria-labelledby="xp-label level-label">
 <div class="level">
-    <span id="level-label" class="level-label">Level: <strong>{{ level|default(3) }}</strong></span>
+    <span id="level-label" class="level-label">
+    Level: <strong>{{ level|default(3) }}</strong>
+    </span>
 </div>
 
 <div class="xp">
@@ -57,47 +59,47 @@
 
 <!-- Tasks + Achievements -->
 <div class="dash-side">
-<div class="card tasks-card">
+<div class="card flex-card tasks-card">
     <h2>Class tasks</h2>
+
+    {% if assignments and assignments|length > 0 %}
     <ul class="tasks">
-    <li>
-        <label class="checkbox">
-        <input type="checkbox" />
-        <span>Complete 3 quizzes</span>
-        </label>
-    </li>
-    <li>
-        <label class="checkbox">
-        <input type="checkbox" />
-        <span>Study for 20 minutes</span>
-        </label>
-    </li>
+        {% for a in assignments %}
+        <li>
+            <label class="checkbox">
+            <input type="checkbox">
+            <span>
+                {% set lesson_href = url_for('learner.lesson', assignment_id=a.assignment_id) if a.assignment_id else '#' %}
+                <a class="link" href="{{ lesson_href }}">{{ a.title }}</a>
+                {% if a.class_ %} — <em>{{ a.class_.title }}</em>{% endif %}
+                {% if a.due_date %} (due {{ a.due_date.strftime('%d %b %Y %H:%M') }}){% endif %}
+            </span>
+            </label>
+        </li>
+        {% endfor %}
     </ul>
+    {% else %}
+    <p class="muted">No assignments yet. Check back later.</p>
+    {% endif %}
 </div>
 
-<div class="card achievements-card">
+<div class="card flex-card achievements-card">
     <h2>Achievements</h2>
     <ul class="achievements" aria-label="Recent achievements">
-    <li>
-        <span class="ach-icon" aria-hidden="true">👤</span>
-        <span class="sr-only">Profile completed</span>
-    </li>
-    <li>
-        <span class="ach-icon" aria-hidden="true">⭐</span>
-        <span class="sr-only">First star earned</span>
-    </li>
-    <li>
-        <span class="ach-icon" aria-hidden="true">🏅</span>
-        <span class="sr-only">Medal achieved</span>
-    </li>
+    <li><span class="ach-icon" aria-hidden="true">👤</span><span class="sr-only">Profile completed</span></li>
+    <li><span class="ach-icon" aria-hidden="true">⭐</span><span class="sr-only">First star earned</span></li>
+    <li><span class="ach-icon" aria-hidden="true">🏅</span><span class="sr-only">Medal achieved</span></li>
     </ul>
 </div>
 </div>
 </section>
 
 <section class="dash-ctas">
-<a class="btn btn-primary" href="{{ url_for('coming_soon') }}">Continue Learning</a>
-<a class="btn btn-secondary" href="#">Take a Quiz</a>
+{% set first = assignments|first if assignments else None %}
+<a class="btn btn-primary"
+    href="{{ url_for('learner.lesson', assignment_id=first.assignment_id) if first else '#' }}">
+Continue Learning
+</a>
+<a class="btn btn-secondary" href="{{ url_for('learner.quiz', assignment_id=first.assignment_id) if first else '#' }}">Take a Quiz</a>
 </section>
-
 {% endblock %}
